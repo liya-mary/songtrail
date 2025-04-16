@@ -4,17 +4,17 @@ import { useEffect } from "react";
 import Tag from "./Tag";
 
 // Ensure that the map automatically recenter when adding a new tag
-function ChangeView({ center }) {
-  const map = useMap();
-  useEffect(() => {
-    if (center) {
-      map.setView(center);
-    }
-  }, [center, map]);
-}
 
 export function Map({addTag, position, tagList}) {
 
+  function ChangeView({ center }) {
+    const map = useMap();
+    useEffect(() => {
+      if (center) {
+        map.setView(center);
+      }
+    }, [center, map]);
+  }
 
   return (
     <>
@@ -32,7 +32,7 @@ export function Map({addTag, position, tagList}) {
           />
         <div className="tagListing">
           {tagList.map((tag, index) => (
-            <Marker position={tag} key={index}>
+            <Marker position={tag.coordinates} key={index}>
               <Tag tag={tag}/>
             </Marker>
           ))}

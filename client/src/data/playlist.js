@@ -1,8 +1,8 @@
-import charli from "../public/Audio/360.mp3"
+import charli from "../Audio/360.mp3"
 
-import allie from "../public/Audio/Black Eye.mp3"
+import allie from "../Audio/BlackEye.mp3"
 
-import carli from "../public/Audio/Call Me Maybe.mp3"
+import carli from "../Audio/CallMeMaybe.mp3"
 
 export const tracks = [
   {
