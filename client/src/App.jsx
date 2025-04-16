@@ -5,6 +5,8 @@ import Map from './components/Map';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { tracks } from './data/playlist';
+import { Playlist } from './components/playlist';
+// import { testData } from './data/trail';
 
 
 
@@ -14,27 +16,19 @@ function App() {
   const [wasPaused, setWasPaused] = useState(false);
   // const [positionList, setPositionList] = useState([]);
   const [currentTrack, setCurrentTrack] = useState(0);
-  const [tagList, setTagList] = useState([])
+  const [tagList, setTagList] = useState([]);
+  const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
 
-
-
-  // tagList = [
-  //   {
-  //     title: '360',
-  //     src: charli,
-  //     author: 'Charli XCX',
-  //     coordinates: [51.505, -0.09],
-  //     timestamp:
-  //   },
 
 
 
   // Ensure that a Tag is only added once per track
   function handlePlay() {
-    if (!wasPaused) {
-      addTag();
+    if (!wasPaused || lastPlayedTrack !== currentTrack) {
+      addTag(tracks[currentTrack]);
     }
     setWasPaused(false);
+    setLastPlayedTrack(currentTrack);
   }
 
   function handlePause() {
@@ -46,27 +40,34 @@ function App() {
   }
 
   function handleNext() {
-    setWasPaused(true);
+    setWasPaused(false);
     setCurrentTrack((prevIndex) => {
+      let newIndex;
       if (prevIndex < tracks.length - 1) {
-        return prevIndex + 1
+        newIndex = prevIndex + 1;
+      } else {
+        newIndex = 0;
       }
-      return 0
-    })
-    addTag()
+      return newIndex;
+    });
   }
 
   function handlePrevious() {
+    setWasPaused(false);
     setCurrentTrack((prevIndex) => {
+      let newIndex;
       if (prevIndex > 0) {
-        return prevIndex - 1;
+        newIndex = prevIndex - 1;
+      } else {
+        newIndex = tracks.length - 1;
       }
-      return tracks.length - 1;
-    })
+      addTag(tracks[newIndex]);
+      return newIndex;
+    });
   }
 
 // Add the tag on the map
-  function addTag() {
+  function addTag(track) {
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -82,9 +83,9 @@ function App() {
 
       setTagList((prevTagList) => ([...prevTagList,
         {
-          title: tracks[currentTrack].title,
-          src: tracks[currentTrack].src,
-          author: tracks[currentTrack].author,
+          title: track.title,
+          src: track.src,
+          author: track.author,
           coordinates: tagCoord,
           timestamp: Date.now(),
         }
@@ -104,6 +105,7 @@ function App() {
   }
 
 
+
   return (
     <>
    <AudioPlayer
@@ -118,6 +120,7 @@ function App() {
       autoPlayAfterSrcChange={true}
       showJumpControls={false}
     />
+    <Playlist/>
     <Map
     handleClick={addTag}
     position={position}
