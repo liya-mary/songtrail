@@ -6,7 +6,8 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { tracks } from './data/playlist';
 import { Playlist } from './components/playlist';
-// import { testData } from './data/trail';
+import { testData } from './data/trail';
+import { Header } from './components/Header';
 
 
 
@@ -108,6 +109,7 @@ function App() {
 
   return (
     <>
+   <Header/>
    <AudioPlayer
     // Need to be able to change the src when clicking on next
       src={tracks[currentTrack].src}

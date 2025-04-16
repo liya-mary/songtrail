@@ -11,7 +11,7 @@ import customIconUrl from '../assets/music-store.png'
 
 // Ensure that the map automatically recenter when adding a new tag
 
-export function Map({addTag, position, tagList}) {
+export function Map({position, tagList}) {
 
   function ChangeView({ center }) {
     const map = useMap();
