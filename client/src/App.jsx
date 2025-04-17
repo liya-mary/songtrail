@@ -8,6 +8,7 @@ import { tracks } from './data/playlist';
 import { Playlist } from './components/playlist';
 import { Header } from './components/Header';
 import tagService from './tagService';
+import { NowPlaying } from './components/NowPlaying';
 // import { testData } from './data/trail';
 
 
@@ -19,15 +20,19 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState(0);
   const [tagList, setTagList] = useState([]);
   const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
+  const track = tracks[currentTrack]
 
 
   useEffect(() => {
     tagService.getTags()
+      .then((tags) => {
+        setTagList(tags)
+      })
   }, []);
 
   function handlePlay() {
     if (!wasPaused || lastPlayedTrack !== currentTrack) {
-      addTag(tracks[currentTrack]);
+      addTag(track);
     }
     setWasPaused(false);
     setLastPlayedTrack(currentTrack);
@@ -114,6 +119,7 @@ function App() {
   return (
     <>
    <Header/>
+   <NowPlaying track={track}/>
    <AudioPlayer
       src={tracks[currentTrack].src}
       onPlay={handlePlay}
@@ -125,7 +131,7 @@ function App() {
       autoPlayAfterSrcChange={true}
       showJumpControls={false}
     />
-    <Playlist/>
+    <Playlist currentTrack={currentTrack}/>
     <Map
     handleClick={addTag}
     position={position}

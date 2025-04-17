@@ -2,8 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const router = require('./router.js');
 const connectDb = require('./db.js');
+// const fs = require('fs');
+// const key = fs.readFileSync('../secret/key.pem');
+// const cert = fs.readFileSync('../secret/cert.pem');
+// const https = require('https');
+
 
 const app = express();
+// const server = https.createServer({key: key, cert: cert }, app);
 const port = 3000;
 
 app.use(cors());

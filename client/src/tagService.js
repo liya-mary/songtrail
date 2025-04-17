@@ -1,16 +1,16 @@
-const BASE_URL = 'https://localhost:3000/trails'
+const BASE_URL = 'http://localhost:3000/trails'
 
 export default {
   getTags: async function () {
     const response = await fetch(BASE_URL);
-    return await response.json;
+    return await response.json();
   },
 
   addTag: async function (tag) {
     console.log('Sending Tag:', {tag})
     const response = await fetch(BASE_URL, {
       method: "POST",
-      header: {
+      headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(tag)

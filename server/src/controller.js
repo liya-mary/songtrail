@@ -1,9 +1,9 @@
-const Events = require('./models.js')
+const Tags = require('./models.js')
 
 async function getTags (req, res) {
   try {
-    const tags = await Events.find();
-    res.status(500).json(tags);
+    const tags = await Tags.find();
+    res.status(200).json(tags);
 
   } catch (err) {
     console.log(err);
@@ -13,7 +13,9 @@ async function getTags (req, res) {
 
 async function addTag (req, res) {
   try {
-    const newTag = await Events.create(req.body);
+    console.log(req.body);
+    const newTag = await Tags.create(req.body);
+    // console.log(newTag);
     res.status(201).json(newTag);
   } catch (err) {
     console.log(err);
