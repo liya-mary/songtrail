@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import customIconUrl from '../assets/music-store.png'
+import customIconUrl from '../assets/pin.png'
 
 export function Map({position, tagList}) {
 

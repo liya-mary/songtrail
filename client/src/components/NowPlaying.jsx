@@ -8,8 +8,8 @@ export function NowPlaying({track}) {
     <>
       <div className="nowPlaying">
         <h3>Now Playing:</h3>
-        <div className="playlistSong active">
-          <p>{track.title} - {track.author}</p>
+        <div className="playlistSong">
+          <p>{track.title} - {track.artist}</p>
         </div>
       </div>
     </>

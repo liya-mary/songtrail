@@ -4,13 +4,11 @@ import './App.css'
 import Map from './components/Map';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { tracks } from './data/playlist';
-import { Playlist } from './components/playlist';
+// import { Playlist } from './components/playlist';
 import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
-// import { testData } from './data/trail';
-
+import { metadata } from './metadataService';
 
 
 function App() {
@@ -20,14 +18,16 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState(0);
   const [tagList, setTagList] = useState([]);
   const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
+  const [tracks, setTracks] = useState([]);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const track = tracks[currentTrack]
 
 
   useEffect(() => {
     tagService.getTags()
-      .then((tags) => {
-        setTagList(tags)
-      })
+    .then(setTagList);
+    metadata()
+    .then(setTracks);
   }, []);
 
   function handlePlay() {
@@ -89,7 +89,7 @@ function App() {
       const newTag = {
         title: track.title,
         src: track.src,
-        author: track.author,
+        artist: track.artist,
         coordinates: tagCoord,
         timestamp: Date.now(),
       }
@@ -114,24 +114,28 @@ function App() {
     navigator.geolocation.getCurrentPosition(success, error, options);
   }
 
-
+  const handleFirstInteraction = () => {
+    setHasUserInteracted(true);
+  };
 
   return (
     <>
    <Header/>
-   <NowPlaying track={track}/>
-   <AudioPlayer
-      src={tracks[currentTrack].src}
+   <NowPlaying track={track || { title: "No track selected", artist: "" }} />
+   <div onClick={handleFirstInteraction}>
+    <AudioPlayer
+      src={tracks[currentTrack]?.src || null}
       onPlay={handlePlay}
       onPause={handlePause}
       onEnded={handleEnded}
       onClickNext={handleNext}
       onClickPrevious={handlePrevious}
       showSkipControls={true}
-      autoPlayAfterSrcChange={true}
+      autoPlayAfterSrcChange={hasUserInteracted}
       showJumpControls={false}
     />
-    <Playlist currentTrack={currentTrack}/>
+    </div>
+    {/* <Playlist currentTrack={currentTrack}/> */}
     <Map
     handleClick={addTag}
     position={position}

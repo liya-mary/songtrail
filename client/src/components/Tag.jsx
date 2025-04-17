@@ -22,7 +22,7 @@ export function Tag({tag}) {
           {tag.title}
         </div>
         <div className="artistName">
-          {tag.author}
+          {tag.artist}
         </div>
         <div className="date">
           {day}-{month}-{year} {formattedHours}:{formattedMinutes}
