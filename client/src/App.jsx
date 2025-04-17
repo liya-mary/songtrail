@@ -1,13 +1,14 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css'
 import Map from './components/Map';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { tracks } from './data/playlist';
 import { Playlist } from './components/playlist';
-import { testData } from './data/trail';
 import { Header } from './components/Header';
+import tagService from './tagService';
+// import { testData } from './data/trail';
 
 
 
@@ -15,15 +16,15 @@ function App() {
 
   const [position, setPosition] = useState([51.505, -0.09]);
   const [wasPaused, setWasPaused] = useState(false);
-  // const [positionList, setPositionList] = useState([]);
   const [currentTrack, setCurrentTrack] = useState(0);
   const [tagList, setTagList] = useState([]);
   const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
 
 
+  useEffect(() => {
+    tagService.getTags()
+  }, []);
 
-
-  // Ensure that a Tag is only added once per track
   function handlePlay() {
     if (!wasPaused || lastPlayedTrack !== currentTrack) {
       addTag(tracks[currentTrack]);
@@ -80,22 +81,25 @@ function App() {
       const tagCoord = [crd.latitude, crd.longitude]
       console.log(tagCoord)
       setPosition(tagCoord)
-      // Still need to ensure that a list of tags is  created
+      const newTag = {
+        title: track.title,
+        src: track.src,
+        author: track.author,
+        coordinates: tagCoord,
+        timestamp: Date.now(),
+      }
 
-      setTagList((prevTagList) => ([...prevTagList,
-        {
-          title: track.title,
-          src: track.src,
-          author: track.author,
-          coordinates: tagCoord,
-          timestamp: Date.now(),
-        }
-      ]))
+      tagService.addTag(newTag)
+        .then(newTag => {
+          setTagList((prevTagList) => ([...prevTagList, newTag]))
+        })
+        .catch(error => {
+          console.log('Could not add a newTag', error)
+        })
 
       // setPositionList((prevPositionList) => ([...prevPositionList, tagCoord])) // FIX ME
       console.log(tagList)
     }
-
 
 
     function error(err) {
@@ -111,7 +115,6 @@ function App() {
     <>
    <Header/>
    <AudioPlayer
-    // Need to be able to change the src when clicking on next
       src={tracks[currentTrack].src}
       onPlay={handlePlay}
       onPause={handlePause}

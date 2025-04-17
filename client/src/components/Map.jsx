@@ -9,8 +9,6 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import customIconUrl from '../assets/music-store.png'
 
-// Ensure that the map automatically recenter when adding a new tag
-
 export function Map({position, tagList}) {
 
   function ChangeView({ center }) {
