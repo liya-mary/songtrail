@@ -8,8 +8,7 @@ import 'react-h5-audio-player/lib/styles.css';
 import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
-import { metadata } from './metadataService';
-import SearchBar from './components/SearchBar';
+import spotifyService from './spotifyService';
 
 
 function App() {
@@ -19,17 +18,25 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState(0);
   const [tagList, setTagList] = useState([]);
   const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
-  const [tracks, setTracks] = useState([]);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
-  const track = tracks[currentTrack]
+  const [searchInput, setSearchInput] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+  const [tracks, setTracks] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
+  const track = playlist[currentTrack]
 
 
   useEffect(() => {
     tagService.getTags()
-    .then(setTagList);
-    metadata()
-    .then(setTracks);
+      .then(setTagList);
+
+    spotifyService.getAccessToken()
+      .then((accessToken) => {
+        console.log(accessToken);
+        setAccessToken(accessToken);
+      });
   }, []);
+
 
   function handlePlay() {
     if (!wasPaused || lastPlayedTrack !== currentTrack) {
@@ -88,9 +95,9 @@ function App() {
       console.log(tagCoord)
       setPosition(tagCoord)
       const newTag = {
-        title: track.title,
-        src: track.src,
-        artist: track.artist,
+        title: track.name,
+        src: track.uri,
+        artist: track.artists.name,
         coordinates: tagCoord,
         timestamp: Date.now(),
       }
@@ -103,7 +110,6 @@ function App() {
           console.log('Could not add a newTag', error)
         })
 
-      // setPositionList((prevPositionList) => ([...prevPositionList, tagCoord])) // FIX ME
       console.log(tagList)
     }
 
@@ -119,10 +125,59 @@ function App() {
     setHasUserInteracted(true);
   };
 
+  async function handleSearch() {
+    const foundTracks = await spotifyService.searchSong(searchInput, accessToken)
+    console.log(foundTracks);
+    setTracks(foundTracks.tracks.items);
+  }
+
+  function handleTrackClick(newTrack) {
+    if (newTrack) {
+    setPlaylist((prevPlaylist) => ([...prevPlaylist, newTrack]))
+    }
+  }
+
   return (
     <>
    <Header/>
-   <SearchBar/>
+   <div className="search">
+        <div className="search-container">
+          <div className="search-box">
+            <input
+              className="search-input"
+              placeholder="Search For Songs"
+              type="text"
+              onChange={event => setSearchInput(event.target.value)}
+            />
+            <button className="search-button" onClick={handleSearch}>
+              Search
+            </button>
+          </div>
+        </div>
+
+        <div className="results-container">
+          <div className="track-list">
+            {tracks.map((track, i) => (
+              <div className="track-item"
+              key={i}
+              onClick={() => handleTrackClick(track)}
+              style={{cursor: 'pointer'}}>
+                <img
+                  src={track.album.images[0]?.url || "#"}
+                  alt={track.name}
+                  className="track-image"
+                />
+                <div className="track-info">
+                  <h3 className="track-name">{track.name}</h3>
+                  <p className="track-artists">
+                    {track.artists.map(artist => artist.name).join(', ')}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
    <NowPlaying track={track || { title: "No track selected", artist: "" }} />
    <div onClick={handleFirstInteraction}>
     <AudioPlayer
