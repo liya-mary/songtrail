@@ -6,12 +6,10 @@ export function NowPlaying({track}) {
 
   return (
     <>
-      <div className="nowPlaying">
-        <h3>Now Playing:</h3>
-        <div className="playlistSong">
-          <p>{track.title} - {track.artist}</p>
-        </div>
-      </div>
+      <div className="now-playing">
+      <h3>{track.name || track.title}</h3>
+      <p>{track.artists ? track.artists.map(a => a.name).join(', ') : track.artist}</p>
+    </div>
     </>
   )
 }

@@ -1,5 +1,5 @@
 const Tags = require('./models.js')
-var access_token
+var access_token = null
 
 async function getTags (req, res) {
   try {
@@ -52,7 +52,7 @@ const generateRandomString = function (length) {
 };
 
 async function spotifyLogin(req, res) {
-  const scope = "streaming user-read-email user-read-private";
+  const scope = "streaming user-read-email user-read-private user-read-playback-state user-read-playback-state user-modify-playback-state";
   const state = generateRandomString(16);
   const { CLIENT_ID } = process.env;
 
@@ -69,8 +69,6 @@ async function spotifyLogin(req, res) {
 
 
 async function spotifyAuth(req, res) {
-  console.log('Line74!')
-
   const code = req.query.code;
   const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
@@ -82,11 +80,17 @@ async function spotifyAuth(req, res) {
     },
     body: new URLSearchParams({
       code: code,
-      redirect_uri: "https://127.0.0.1:5173/auth/callback",
+      redirect_uri: "http://127.0.0.1:3000/auth/callback",
       grant_type: 'authorization_code'
     })
   });
-    console.log('line90!')
+
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error("Spotify API Error:", errorText);
+      return res.status(400).json({ error: "Failed to get token", details: errorText });
+    }
+
     const tokenData = await tokenResponse.json();
     access_token = tokenData.access_token;
     res.redirect('https://localhost:5173')
@@ -95,11 +99,10 @@ async function spotifyAuth(req, res) {
 
 
 async function returnToken(req, res) {
-  res.json(
-    {
-      access_token: access_token
-    }
-  )
+  if (!access_token) {
+    return res.status(401).json({ error: "No token available" });
+  }
+  res.json({ access_token: access_token });
 }
 
 
