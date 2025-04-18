@@ -9,6 +9,7 @@ import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
 import spotifyService from './spotifyService';
+import Login from './components/login';
 
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
   const [tracks, setTracks] = useState([]);
   const [playlist, setPlaylist] = useState([]);
   const track = playlist[currentTrack]
+  const [authToken, setAuthToken] = useState('');
+  const [player, setPlayer] = useState(undefined);
 
 
   useEffect(() => {
@@ -32,9 +35,61 @@ function App() {
 
     spotifyService.getAccessToken()
       .then((accessToken) => {
-        console.log(accessToken);
         setAccessToken(accessToken);
       });
+
+    spotifyService.getToken()
+      .then((authToken) => {
+        console.log(authToken)
+        setAuthToken(authToken.access_token)
+      });
+
+      if (authToken) {
+        const script = document.createElement("script");
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        script.async = true;
+
+        document.body.appendChild(script);
+
+        window.onSpotifyWebPlaybackSDKReady = () => {
+          const player = new window.Spotify.Player({
+            name: 'Web Playback SDK',
+            getOAuthToken: cb => {
+              cb(authToken);
+            },
+            volume: 0.5
+          });
+
+          setPlayer(player);
+
+          player.addListener('ready', ({ device_id }) => {
+            console.log('Ready with Device ID', device_id);
+            // Transfer playback to this device
+            fetch('https://api.spotify.com/v1/me/player', {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                device_ids: [device_id],
+                play: false
+              })
+            });
+          });
+
+          player.addListener('not_ready', ({ device_id }) => {
+            console.log('Device ID has gone offline', device_id);
+          });
+
+          player.connect().then(success => {
+            if (!success) {
+              console.log('Failed to connect player');
+            }
+          });
+        };
+      }
+
   }, []);
 
 
@@ -140,6 +195,7 @@ function App() {
   return (
     <>
    <Header/>
+    <Login />
    <div className="search">
         <div className="search-container">
           <div className="search-box">

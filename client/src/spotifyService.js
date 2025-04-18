@@ -9,9 +9,7 @@ export default {
     }
 
     const tokenObject = await response.json();
-    console.log(tokenObject)
     const accessToken = tokenObject.access_token;
-    console.log(accessToken)
 
     return accessToken
 
@@ -29,4 +27,12 @@ export default {
     const response = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=track&limit=5', searchParameters)
     return await response.json()
   },
+
+
+ getToken: async function () {
+    const response = await fetch('/auth/token');
+    const json = await response.json();
+    return json
+  },
+
 }
