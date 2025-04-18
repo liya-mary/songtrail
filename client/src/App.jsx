@@ -9,6 +9,7 @@ import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
 import { metadata } from './metadataService';
+import SearchBar from './components/SearchBar';
 
 
 function App() {
@@ -121,6 +122,7 @@ function App() {
   return (
     <>
    <Header/>
+   <SearchBar/>
    <NowPlaying track={track || { title: "No track selected", artist: "" }} />
    <div onClick={handleFirstInteraction}>
     <AudioPlayer

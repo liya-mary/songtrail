@@ -6,13 +6,26 @@ export function SearchBar () {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [tracks, setTracks] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
 
-
-  //how to get the accessToken here?
 
   useEffect(() => {
-    setAccessToken(spotifyService.getAccessToken()) // fix this
+    spotifyService.getAccessToken()
+      .then((accessToken) => {
+        console.log(accessToken)
+        setAccessToken(accessToken) 
+      })
   }, [])
+
+  async function handleSearch() {
+    const foundTracks = await spotifyService.searchSong(searchInput, accessToken)
+    console.log(foundTracks);
+    setTracks(foundTracks.tracks.items);
+  }
+
+  function handleTrackClick(newTrack) {
+    setPlaylist((prevPlaylist) => ([...prevPlaylist, newTrack]))
+  }
 
   return (
       <div className="search">
@@ -22,9 +35,9 @@ export function SearchBar () {
               className="search-input"
               placeholder="Search For Songs"
               type="text"
-              onChange={event => setSearchInput(event.target.value, accessToken)}
+              onChange={event => setSearchInput(event.target.value)}
             />
-            <button className="search-button" onClick={setTracks(spotifyService.searchSong(searchInput))}>
+            <button className="search-button" onClick={handleSearch}>
               Search
             </button>
           </div>
@@ -33,7 +46,10 @@ export function SearchBar () {
         <div className="results-container">
           <div className="track-list">
             {tracks.map((track, i) => (
-              <div className="track-item" key={i}>
+              <div className="track-item"
+              key={i}
+              onClick={() => handleTrackClick(track)}
+              style={{cursor: 'pointer'}}>
                 <img
                   src={track.album.images[0]?.url || "#"}
                   alt={track.name}

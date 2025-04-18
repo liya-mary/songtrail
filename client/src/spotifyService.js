@@ -8,7 +8,10 @@ export default {
       return null;
     }
 
-    const accessToken = await response.json();
+    const tokenObject = await response.json();
+    console.log(tokenObject)
+    const accessToken = tokenObject.access_token;
+    console.log(accessToken)
 
     return accessToken
 

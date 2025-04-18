@@ -13,7 +13,6 @@ async function getTags (req, res) {
 
 async function addTag (req, res) {
   try {
-    console.log(req.body);
     const newTag = await Tags.create(req.body);
     res.status(201).json(newTag);
   } catch (err) {
@@ -24,16 +23,17 @@ async function addTag (req, res) {
 
 async function getToken (req, res) {
   try {
-    const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
+    const { CLIENT_ID, CLIENT_SECRET } = process.env;
+    console.log(CLIENT_ID, CLIENT_SECRET)
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: 'grant_type=client_credentials&client_id=' + SPOTIFY_CLIENT_ID + '&client_secret=' + SPOTIFY_CLIENT_SECRET
+      body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
     })
-    const accessToken = await response.json()
-    res.status(200).json(accessToken)
+    const tokenObject = await response.json()
+    res.status(200).json(tokenObject)
 
   } catch (err) {
     console.log(err);

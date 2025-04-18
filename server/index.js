@@ -1,16 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const router = require('./router.js');
-const connectDb = require('./db.js');
-require('dotenv').config({ path: '../.env' });
- // const fs = require('fs');
-// const key = fs.readFileSync('../secret/key.pem');
-// const cert = fs.readFileSync('../secret/cert.pem');
-// const https = require('https');
+require('dotenv').config();
+const router = require('./src/router.js');
+const connectDb = require('./src/db.js');
 
 
 const app = express();
-// const server = https.createServer({key: key, cert: cert }, app);
 const port = 3000;
 
 app.use(cors());
