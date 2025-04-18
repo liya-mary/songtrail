@@ -22,9 +22,9 @@ export function SearchBar () {
               className="search-input"
               placeholder="Search For Songs"
               type="text"
-              onChange={event => setSearchInput(event.target.value)}
+              onChange={event => setSearchInput(event.target.value, accessToken)}
             />
-            <button className="search-button" onClick={setTracks(spotifyService.searchSong())}> 
+            <button className="search-button" onClick={setTracks(spotifyService.searchSong(searchInput))}>
               Search
             </button>
           </div>
