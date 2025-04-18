@@ -11,13 +11,16 @@ import customIconUrl from '../assets/pin.png'
 
 export function Map({position, tagList}) {
 
-  function ChangeView({ center }) {
+  function ChangeView({ center, zoom }) {
     const map = useMap();
     useEffect(() => {
       if (center) {
-        map.setView(center);
+        map.flyTo(center, zoom, {
+          duration: 1,
+          easeLinearity: 0.25
+        });
       }
-    }, [center, map]);
+    }, [center, zoom, map]);
   }
 
   let trail = tagList.map((tag) => {
@@ -49,7 +52,7 @@ export function Map({position, tagList}) {
       scrollWheelZoom={true}
       style={{ minHeight: "400px", minWidth: "400px" }}
       >
-        <ChangeView center={position} />
+        <ChangeView center={position} zoom={18}/>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -2,9 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css'
 import Map from './components/Map';
-import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-// import { Playlist } from './components/playlist';
 import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
@@ -33,11 +31,31 @@ function App() {
   const [current_track, setTrack] = useState(null);
   const [device_id, setDeviceId] = useState('');
   const [isPaused, setIsPaused] = useState(true);
+  const [showResults, setShowResults] = useState(true);
 
 
 // UseEffect section
 
   useEffect(() => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    const success = (pos) => {
+      const crd = pos.coords;
+      setPosition([crd.latitude, crd.longitude]);
+    };
+
+    const error = (err) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+      // Fallback to default position if geolocation fails
+      setPosition([51.505, -0.09]);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
     tagService.getTags()
       .then(setTagList);
 
@@ -55,7 +73,7 @@ function App() {
 
     useEffect(() => {
       if (current_track && !is_paused) {
-        // Check if this is a new track (not just resuming)
+
         if (lastPlayedTrack !== current_track.id) {
           addTag(current_track);
           setLastPlayedTrack(current_track.id);
@@ -81,6 +99,7 @@ function App() {
 
           player.addListener('ready', ({ device_id }) => {
             console.log('Ready with Device ID', device_id);
+            setDeviceId(device_id);
 
             fetch('https://api.spotify.com/v1/me/player', {
               method: 'PUT',
@@ -174,25 +193,44 @@ function App() {
   async function handleSearch() {
     const foundTracks = await spotifyService.searchSong(searchInput, accessToken);
     setTracks(foundTracks.tracks.items);
+    setShowResults(true);
+  }
+
+  function handleCancel() {
+    setSearchInput("");
+    setShowResults(false);
   }
 
   function handleTrackClick(track) {
-    if (!track || !player) return;
+    if (!player || !authToken) return;
 
-    setPlaylist(prev => [...prev, track]);
+    setShowResults(false);
 
-    player._options.getOAuthToken(token => {
-      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
-        method: 'PUT',
-        body: JSON.stringify({ uris: [track.uri] }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      }).catch(err => console.error('Error playing track:', err));
+    // Transfer playback to your Web Playback SDK device
+    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        uris: [track.uri],
+        position_ms: 0
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to play track');
+      }
+      console.log('Track started playing');
+      setTrack(track);
+      setPaused(false);
+      setIsPaused(false);
+    })
+    .catch(error => {
+      console.error('Error playing track:', error);
     });
   }
-
 
 
   // Tag system
@@ -236,17 +274,6 @@ function App() {
   }
 
 
-  // async function handleSearch() {
-  //   const foundTracks = await spotifyService.searchSong(searchInput, accessToken)
-  //   console.log(foundTracks);
-  //   setTracks(foundTracks.tracks.items);
-  // }
-
-  // function handleTrackClick(newTrack) {
-  //   if (newTrack) {
-  //   setPlaylist((prevPlaylist) => ([...prevPlaylist, newTrack]))
-  //   }
-  // }
 
   return (
     <>
@@ -259,14 +286,16 @@ function App() {
               className="search-input"
               placeholder="Search For Songs"
               type="text"
+              value={searchInput}
               onChange={event => setSearchInput(event.target.value)}
             />
             <button className="search-button" onClick={handleSearch}>
               Search
             </button>
+            <button className="cancel-button" onClick={handleCancel}>X</button>
           </div>
         </div>
-
+      {showResults && (
         <div className="results-container">
           <div className="track-list">
             {tracks.map((track, i) => (
@@ -278,7 +307,7 @@ function App() {
                   src={track.album.images[0]?.url || "#"}
                   alt={track.name}
                   className="track-image"
-                />
+                  />
                 <div className="track-info">
                   <h3 className="track-name">{track.name}</h3>
                   <p className="track-artists">
@@ -289,6 +318,7 @@ function App() {
             ))}
           </div>
         </div>
+      )}
       </div>
     <NowPlaying track={current_track || track || { name: "No track selected", artists: [{name: ""}] }} />
    <div className="container">
