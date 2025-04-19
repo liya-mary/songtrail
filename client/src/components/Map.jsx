@@ -15,7 +15,7 @@ export function Map({position, tagList}) {
     const map = useMap();
     useEffect(() => {
       if (center) {
-        map.flyTo(center, zoom, {
+        map.setView(center, zoom, {
           duration: 1,
           easeLinearity: 0.25
         });
