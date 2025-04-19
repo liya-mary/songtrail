@@ -112,11 +112,12 @@ button:focus-visible {
   font-size: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  background-color: #282828;
 }
 
 .search-button {
   padding: 12px 20px;
-  background-color: #1DB954;
+  background-color: #67B996;
   color: white;
   border: none;
   border-radius: 4px;
@@ -125,6 +126,10 @@ button:focus-visible {
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+
+.cancel-button {
+  background-color: #282828;
 }
 
 /* ===== Track List ===== */
@@ -171,6 +176,7 @@ button:focus-visible {
 .radio {
   background: #282828;
   border-radius: 4px;
+  padding-top: 10px;
 }
 
 /* ===== Now Playing ===== */
@@ -188,6 +194,7 @@ button:focus-visible {
   object-fit: cover;
   border-radius: 4px;
   padding: 5px;
+  padding-left: 15px;
 }
 
 .now-playing-track-details {
@@ -198,7 +205,7 @@ button:focus-visible {
 .track-title {
   margin: 0;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .track-artist {
@@ -222,12 +229,12 @@ button:focus-visible {
 }
 
 .player-controls button {
-  background: #1DB954;
+  background: #67B996;
   color: white;
   border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   font-size: 16px;
   cursor: pointer;
   display: flex;
@@ -235,6 +242,3 @@ button:focus-visible {
   justify-content: center;
 }
 
-.player-controls button:hover {
-  background: #1ed760;
-}
