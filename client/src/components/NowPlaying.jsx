@@ -3,12 +3,13 @@ import React from "react";
 
 export function NowPlaying({track}) {
 
-console.log(track)
+  const placeholderImage = "https://via.placeholder.com/150";
+
   return (
     <>
       <div className="now-playing-container">
         <img
-          src={track?.album?.images[0]?.url || "#"}
+          src={track?.album?.images[0]?.url || placeholderImage}
           className="now-playing-image"
         />
         <div className="now-playing-track-details">

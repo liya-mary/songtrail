@@ -11,4 +11,4 @@ export function Header() {
   )
 }
 
-export default Map
+export default Header
