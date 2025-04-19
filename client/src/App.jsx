@@ -11,7 +11,6 @@ import playIcon from "./assets/player/play-button.png"
 import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
-import Slogan from './components/Slogan';
 import cancel from "./assets/cancel-button.png";
 
 function App() {
@@ -271,11 +270,8 @@ function App() {
 
   return (
     <>
-
    {!authToken && (
-     <>
       <Login/>
-    </>
    )}
 
   {authToken && (
@@ -366,12 +362,12 @@ function App() {
       </div>
       </div>
         </div>
-      </>
-  )}
     <Map
     handleClick={addTag}
     position={position}
     tagList={tagList}/>
+    </>
+  )}
     </>
   )
 }

@@ -66,6 +66,19 @@ button:focus-visible {
   max-width: 500px;
 }
 
+
+/* ===== Login Component ===== */
+.login-songTrail{
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  color: #67B996;
+  font-size: 50px;
+  margin-bottom: 0px;
+  padding: 0px;
+}
+
+
 /* ===== Header ===== */
 .songTrail {
   font-family: "Poppins", sans-serif;
@@ -79,6 +92,9 @@ button:focus-visible {
 /* ===== Slogan ===== */
 .slogan {
   margin-top: 0px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 
@@ -86,12 +102,13 @@ button:focus-visible {
 .login {
   padding-bottom: 20px;
 }
-.login button {
+.login-button {
   font-family: "Poppins", sans-serif;
   color: black;
   font-weight: 500;
   font-style: normal;
   background-color: #67B996;
+  margin-top: 10px;
 }
 
 /* ===== Search ===== */
