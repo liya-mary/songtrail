@@ -163,12 +163,24 @@ button:focus-visible {
 
 
 .track-image {
-  width: 150px;
-  height: 150px;
+  width: 75px;
+  height: 75px;
   object-fit: cover;
   border-radius: 4px;
-  background-color: black;
-  padding: 10px
+  padding: 5px
+}
+
+.now-playing-container{
+  display: flex;
+  gap: 20px;
+}
+
+.now-playing-image{
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 4px;
+  padding: 5px
 }
 
 
