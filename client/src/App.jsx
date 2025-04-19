@@ -321,6 +321,8 @@ function App() {
         </div>
       )}
       </div>
+
+    <div className='radio'>
     <NowPlaying track={current_track || { name: "No track selected", artists: [{name: ""}] }} />
    <div className="container">
            <div className="main-wrapper">
@@ -353,6 +355,7 @@ function App() {
           </button>
         </div>
       )}
+      </div>
       </div>
         </div>
       </>

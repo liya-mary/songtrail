@@ -93,7 +93,6 @@ button:focus-visible {
   position: relative;
   max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .search-container {
@@ -110,7 +109,7 @@ button:focus-visible {
 .search-input {
   flex: 1;
   padding: 12px 15px;
-  font-size: 16px;
+  font-size: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -168,6 +167,12 @@ button:focus-visible {
   text-align: left;
 }
 
+/* ===== Radio ===== */
+.radio {
+  background: #282828;
+  border-radius: 4px;
+}
+
 /* ===== Now Playing ===== */
 .now-playing-container {
   display: flex;
@@ -204,11 +209,9 @@ button:focus-visible {
 
 /* ===== Player Controls ===== */
 .player-controls {
-
   bottom: 0;
   left: 0;
   right: 0;
-  background: #282828;
   padding: 15px;
   display: flex;
   justify-content: center;
