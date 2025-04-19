@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css'
 import Map from './components/Map';
-import 'react-h5-audio-player/lib/styles.css';
 import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
@@ -13,12 +12,9 @@ import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
 import Slogan from './components/Slogan';
-import SplitText from './components/SplitText';
 
 function App() {
-  const handleAnimationComplete = () => {
-    console.log('All letters have animated!');
-  };
+
   // Geolocation + Tags
   const [position, setPosition] = useState([51.505, -0.09]);
   const [tagList, setTagList] = useState([]);
@@ -275,18 +271,6 @@ function App() {
   return (
     <>
    <Header/>
-
-   <SplitText
-  text="Hello, Tailwind!"
-  className="text-2xl font-semibold text-center"
-  delay={150}
-  animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
-  animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
-  easing="easeOutCubic"
-  threshold={0.2}
-  rootMargin="-50px"
-  onLetterAnimationComplete={handleAnimationComplete}
-/>
 
    {!authToken && (
     <>

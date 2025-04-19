@@ -1,9 +1,7 @@
 import React from "react";
-
+import placeholderImage from '../assets/pin.png'
 
 export function NowPlaying({track}) {
-
-  const placeholderImage = "https://via.placeholder.com/150";
 
   return (
     <>
