@@ -12,26 +12,25 @@ import Login from './components/login';
 
 function App() {
 
+  // Geolocation + Tags
   const [position, setPosition] = useState([51.505, -0.09]);
-  const [wasPaused, setWasPaused] = useState(false);
-  const [currentTrack, setCurrentTrack] = useState(0);
   const [tagList, setTagList] = useState([]);
-  const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
+
+  //Search UI
   const [searchInput, setSearchInput] = useState("");
-  const [accessToken, setAccessToken] = useState("");
   const [tracks, setTracks] = useState([]);
-  const [playlist, setPlaylist] = useState([]);
-  const track = playlist[currentTrack]
+  const [showResults, setShowResults] = useState(true);
+
+  //Spotify Auth
+  const [accessToken, setAccessToken] = useState("");
   const [authToken, setAuthToken] = useState('');
 
   // Webplayer
   const [player, setPlayer] = useState(undefined);
-  const [is_paused, setPaused] = useState(false);
-  const [is_active, setActive] = useState(false);
   const [current_track, setTrack] = useState(null);
-  const [device_id, setDeviceId] = useState('');
   const [isPaused, setIsPaused] = useState(true);
-  const [showResults, setShowResults] = useState(true);
+  const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
+  const [device_id, setDeviceId] = useState('');
 
 
 // UseEffect section
@@ -64,7 +63,7 @@ function App() {
         setAccessToken(accessToken);
       });
 
-    spotifyService.getToken()
+    spotifyService.getAuthToken()
       .then((authToken) => {
         console.log(authToken)
         setAuthToken(authToken.access_token)
@@ -72,14 +71,14 @@ function App() {
     }, []);
 
     useEffect(() => {
-      if (current_track && !is_paused) {
+      if (current_track && !isPaused) {
 
         if (lastPlayedTrack !== current_track.id) {
           addTag(current_track);
           setLastPlayedTrack(current_track.id);
         }
       }
-    }, [current_track, is_paused]);
+    }, [current_track, isPaused,]);
 
     useEffect(() => {
       if (authToken) {
@@ -119,17 +118,12 @@ function App() {
           });
 
           player.addListener('player_state_changed', (state) => {
-            if (!state) return;
-            setTrack(state.track_window.current_track);
-            setPaused(state.paused);
-
-            if (state.track_window.current_track) {
-              setCurrentTrack(state.track_window.current_track);
+            if (!state) {
+              setTrack(null);  // No active track
+              return;
             }
-
-            player.getCurrentState().then(state => {
-              (!state) ? setActive(false) : setActive(true);
-            });
+            setTrack(state.track_window.current_track);
+            setIsPaused(state.paused);
           });
 
           player.connect().then(success => {
@@ -166,7 +160,6 @@ function App() {
     if (player) {
       player.pause().then(() => {
         setIsPaused(true);
-        setWasPaused(true);
       });
     }
   };
@@ -174,7 +167,6 @@ function App() {
   const handleNext = () => {
     if (player) {
       player.nextTrack().then(() => {
-        setWasPaused(false);
       });
     }
   };
@@ -182,7 +174,6 @@ function App() {
   const handlePrevious = () => {
     if (player) {
       player.previousTrack().then(() => {
-        setWasPaused(false);
       });
     }
   };
@@ -224,7 +215,6 @@ function App() {
       }
       console.log('Track started playing');
       setTrack(track);
-      setPaused(false);
       setIsPaused(false);
     })
     .catch(error => {
@@ -279,7 +269,10 @@ function App() {
     <>
    <Header/>
     <Login />
-   <div className="search">
+
+  {authToken && (
+    <>
+    <div className="search">
         <div className="search-container">
           <div className="search-box">
             <input
@@ -288,7 +281,7 @@ function App() {
               type="text"
               value={searchInput}
               onChange={event => setSearchInput(event.target.value)}
-            />
+              />
             <button className="search-button" onClick={handleSearch}>
               Search
             </button>
@@ -320,7 +313,7 @@ function App() {
         </div>
       )}
       </div>
-    <NowPlaying track={current_track || track || { name: "No track selected", artists: [{name: ""}] }} />
+    <NowPlaying track={current_track || { name: "No track selected", artists: [{name: ""}] }} />
    <div className="container">
            <div className="main-wrapper">
 
@@ -331,12 +324,14 @@ function App() {
         <div className="player-controls">
           <button onClick={handlePrevious}>Previous</button>
           <button  onClick={isPaused ? handlePlay : handlePause}>
-            {is_paused ? 'Play' : 'Pause'}
+            {isPaused ? 'Play' : 'Pause'}
           </button>
           <button onClick={handleNext}>Next</button>
         </div>
       )}
       </div>
+      </>
+        )}
     <Map
     handleClick={addTag}
     position={position}

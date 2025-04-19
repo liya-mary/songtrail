@@ -29,7 +29,7 @@ export default {
   },
 
 
- getToken: async function () {
+ getAuthToken: async function () {
     const response = await fetch('/auth/token');
     const json = await response.json();
     return json
