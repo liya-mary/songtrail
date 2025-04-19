@@ -8,7 +8,10 @@ import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
 import spotifyService from './spotifyService';
 import Login from './components/login';
-
+import playIcon from "./assets/player/play-button.png"
+import pauseIcon from "./assets/player/pause-button.png"
+import previousIcon from "./assets/player/previous-button.png"
+import nextIcon from "./assets/player/next-button.png"
 
 function App() {
 
@@ -268,7 +271,10 @@ function App() {
   return (
     <>
    <Header/>
+
+   {!authToken && (
     <Login />
+   )}
 
   {authToken && (
     <>
@@ -322,11 +328,27 @@ function App() {
     <div className='player'>
       {player && (
         <div className="player-controls">
-          <button onClick={handlePrevious}>Previous</button>
-          <button  onClick={isPaused ? handlePlay : handlePause}>
-            {isPaused ? 'Play' : 'Pause'}
+          <button onClick={handlePrevious}>
+            <img
+              src={previousIcon}
+              width="24px"
+              length="24px"
+            />
+            </button>
+            <button  onClick={isPaused ? handlePlay : handlePause}>
+            <img
+              src={isPaused ? playIcon : pauseIcon}
+              width="30px"
+              length="30px"
+            />
           </button>
-          <button onClick={handleNext}>Next</button>
+          <button onClick={handleNext}>
+          <img
+              src={nextIcon}
+              width="24px"
+              length="24px"
+            />
+          </button>
         </div>
       )}
       </div>
