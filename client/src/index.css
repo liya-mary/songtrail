@@ -1,25 +1,15 @@
+/* ===== Base Styles ===== */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
@@ -30,9 +20,13 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
 }
 
 button {
@@ -67,17 +61,25 @@ button:focus-visible {
   }
 }
 
+/* ===== Layout Components ===== */
+.overall {
+  max-width: 500px;
+}
+
+/* ===== Header ===== */
 .songTrail {
   font-family: "Poppins", sans-serif;
   font-weight: 800;
   font-style: normal;
   color: #67B996;
+  font-size: 50px;
+  margin: 10px 0 15px;
 }
 
+/* ===== Login ===== */
 .login {
   padding-bottom: 20px;
 }
-
 .login button {
   font-family: "Poppins", sans-serif;
   color: black;
@@ -86,9 +88,10 @@ button:focus-visible {
   background-color: #67B996;
 }
 
+/* ===== Search ===== */
 .search {
   position: relative;
-  max-width: 1200px;
+  max-width: 400px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -125,11 +128,11 @@ button:focus-visible {
   font-style: normal;
 }
 
+/* ===== Track List ===== */
 .track-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background-color: #1a1a1a;
 }
 
 .track-item {
@@ -140,63 +143,68 @@ button:focus-visible {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 400px;
 }
 
 .track-image {
-  width: 64px;
-  height: 64px;
+  width: 75px;
+  height: 75px;
   object-fit: cover;
   border-radius: 4px;
+  padding: 5px;
 }
 
 .track-name {
   margin: 0;
   font-size: 16px;
   color: #333;
+  text-align: left;
 }
 
 .track-artists {
   margin: 5px 0 0;
   font-size: 14px;
   color: #666;
+  text-align: left;
 }
 
-
-.track-image {
-  width: 75px;
-  height: 75px;
-  object-fit: cover;
-  border-radius: 4px;
-  padding: 5px
-}
-
-.now-playing-container{
+/* ===== Now Playing ===== */
+.now-playing-container {
   display: flex;
   gap: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+  max-width: 400px;
 }
 
-.now-playing-image{
+.now-playing-image {
   width: 75px;
   height: 75px;
   object-fit: cover;
   border-radius: 4px;
-  padding: 5px
+  padding: 5px;
 }
 
-
-.nowPlaying {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.now-playing-track-details {
+  text-align: left;
+  flex: 1;
 }
 
-.nowPlaying h3, .nowPlaying p {
+.track-title {
   margin: 0;
+  font-weight: bold;
+  font-size: 16px;
 }
 
+.track-artist {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: white;
+}
 
-/* Add to your App.css */
+/* ===== Player Controls ===== */
 .player-controls {
+
   bottom: 0;
   left: 0;
   right: 0;
@@ -204,7 +212,7 @@ button:focus-visible {
   padding: 15px;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 50px;
   z-index: 1000;
   margin-bottom: 20px;
 }

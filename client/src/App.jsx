@@ -278,12 +278,14 @@ function App() {
 
   {authToken && (
     <>
+    <div className='overall'>
+
     <div className="search">
         <div className="search-container">
           <div className="search-box">
             <input
               className="search-input"
-              placeholder="Search For Songs"
+              placeholder="What do you want to listen to?"
               type="text"
               value={searchInput}
               onChange={event => setSearchInput(event.target.value)}
@@ -333,25 +335,26 @@ function App() {
               src={previousIcon}
               width="24px"
               length="24px"
-            />
+              />
             </button>
             <button  onClick={isPaused ? handlePlay : handlePause}>
             <img
               src={isPaused ? playIcon : pauseIcon}
               width="30px"
               length="30px"
-            />
+              />
           </button>
           <button onClick={handleNext}>
           <img
               src={nextIcon}
               width="24px"
               length="24px"
-            />
+              />
           </button>
         </div>
       )}
       </div>
+        </div>
       </>
         )}
     <Map

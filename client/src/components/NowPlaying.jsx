@@ -11,7 +11,7 @@ console.log(track)
           src={track?.album?.images[0]?.url || "#"}
           className="now-playing-image"
         />
-        <div className="song-details">
+        <div className="now-playing-track-details">
           <p className="track-title">{track.name || track.title}</p>
           <p className="track-artist">{track.artists ? track.artists.map(a => a.name).join(', ') : track.artist}</p>
         </div>
