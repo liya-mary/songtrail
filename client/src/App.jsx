@@ -12,6 +12,7 @@ import playIcon from "./assets/player/play-button.png"
 import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
+import Slogan from './components/Slogan';
 
 function App() {
 
@@ -273,7 +274,10 @@ function App() {
    <Header/>
 
    {!authToken && (
-    <Login />
+    <>
+      <Slogan/>
+      <Login/>
+    </>
    )}
 
   {authToken && (

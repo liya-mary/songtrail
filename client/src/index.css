@@ -184,7 +184,7 @@ button:focus-visible {
 
 .now-playing-image {
   width: 75px;
-  height: 75px;
+  height: px;
   object-fit: cover;
   border-radius: 4px;
   padding: 5px;
@@ -213,6 +213,7 @@ button:focus-visible {
   left: 0;
   right: 0;
   padding: 15px;
+  padding-top: 0px;
   display: flex;
   justify-content: center;
   gap: 50px;
