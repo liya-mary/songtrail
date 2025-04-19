@@ -12,6 +12,7 @@ import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
 import cancel from "./assets/cancel-button.png";
+import search from "./assets/search-button.png";
 
 function App() {
 
@@ -289,13 +290,15 @@ function App() {
               onChange={event => setSearchInput(event.target.value)}
               />
             <button className="search-button" onClick={handleSearch}>
-              Search
+              <img src={search}
+              width="25px"
+              length="25px"/>
             </button>
             <button className="cancel-button" onClick={handleCancel}>
               <img
               src={cancel}
-              width="10px"
-              length="10px"
+              width="25px"
+              length="25px"
               />
             </button>
           </div>

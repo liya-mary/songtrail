@@ -139,7 +139,7 @@ button:focus-visible {
 }
 
 .search-button {
-  padding: 12px 20px;
+  padding: 5px 15px;
   background-color: #67B996;
   color: white;
   border: none;
@@ -153,6 +153,8 @@ button:focus-visible {
 
 .cancel-button {
   background-color: #282828;
+  padding-left: 9px;
+  padding-right: 9px;
 }
 
 /* ===== Track List ===== */
