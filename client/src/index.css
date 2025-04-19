@@ -76,6 +76,12 @@ button:focus-visible {
   margin: 10px 0 15px;
 }
 
+/* ===== Slogan ===== */
+.slogan {
+  margin-top: 0px;
+}
+
+
 /* ===== Login ===== */
 .login {
   padding-bottom: 20px;
@@ -110,7 +116,7 @@ button:focus-visible {
   flex: 1;
   padding: 12px 15px;
   font-size: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #67B996;
   border-radius: 4px;
   background-color: #282828;
 }
@@ -144,7 +150,7 @@ button:focus-visible {
   align-items: center;
   gap: 15px;
   padding: 10px;
-  background: white;
+  background: #282828;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   max-width: 400px;
@@ -160,22 +166,22 @@ button:focus-visible {
 
 .track-name {
   margin: 0;
-  font-size: 16px;
-  color: #333;
+  font-size: 20px;
+  color: white;
   text-align: left;
 }
 
 .track-artists {
   margin: 5px 0 0;
   font-size: 14px;
-  color: #666;
+  color: white;
   text-align: left;
 }
 
 /* ===== Radio ===== */
 .radio {
   background: #282828;
-  border-radius: 4px;
+  border-radius: 8px;
   padding-top: 10px;
 }
 
@@ -206,6 +212,7 @@ button:focus-visible {
   margin: 0;
   font-weight: bold;
   font-size: 20px;
+  color: white;
 }
 
 .track-artist {

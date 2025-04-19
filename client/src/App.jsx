@@ -12,6 +12,7 @@ import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
 import Slogan from './components/Slogan';
+import cancel from "./assets/cancel-button.png";
 
 function App() {
 
@@ -270,19 +271,17 @@ function App() {
 
   return (
     <>
-   <Header/>
 
    {!authToken && (
-    <>
-      <Slogan/>
+     <>
       <Login/>
     </>
    )}
 
   {authToken && (
     <>
+    <Header/>
     <div className='overall'>
-
     <div className="search">
         <div className="search-container">
           <div className="search-box">
@@ -296,7 +295,13 @@ function App() {
             <button className="search-button" onClick={handleSearch}>
               Search
             </button>
-            <button className="cancel-button" onClick={handleCancel}>X</button>
+            <button className="cancel-button" onClick={handleCancel}>
+              <img
+              src={cancel}
+              width="10px"
+              length="10px"
+              />
+            </button>
           </div>
         </div>
       {showResults && (
@@ -362,7 +367,7 @@ function App() {
       </div>
         </div>
       </>
-        )}
+  )}
     <Map
     handleClick={addTag}
     position={position}

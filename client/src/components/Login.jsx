@@ -2,13 +2,17 @@ import React from "react";
 
 function Login() {
   return (
-      <div className="login">
-          <a className="btn-spotify" href="/auth/login" >
-            <button>
-                Login with Spotify
-            </button>
-          </a>
-      </div>
+    <>
+      <h1 className="songTrail">SongTrail</h1>
+      <p className="slogan">The soundtrack of your life, mapped.</p>
+        <div className="login">
+            <a className="btn-spotify" href="/auth/login" >
+              <button>
+                  Login with Spotify
+              </button>
+            </a>
+        </div>
+    </>
   );
 }
 

@@ -1,11 +1,12 @@
 import React from "react";
 
-function Slogan() {
+function Welcome() {
   return (
-      <div className="slogan">
-        <p>The soundtrack of your life, mapped.</p>
-      </div>
+    <>
+    <h1 className="songTrail">SongTrail</h1>
+    <p className="slogan">The soundtrack of your life, mapped.</p>
+   </>
   );
 }
 
-export default Slogan
+export default Welcome
