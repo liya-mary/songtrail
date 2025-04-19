@@ -8,6 +8,10 @@ import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
 import spotifyService from './spotifyService';
 import Login from './components/login';
+import playIcon from "./assets/player/play-button.png"
+import pauseIcon from "./assets/player/pause-button.png"
+import previousIcon from "./assets/player/previous-button.png"
+import nextIcon from "./assets/player/next-button.png"
 
 
 function App() {
@@ -35,6 +39,16 @@ function App() {
 
 // UseEffect section
 
+useEffect(() => {
+  const refreshToken = async () => {
+    const newToken = await spotifyService.refreshToken();
+    setAuthToken(newToken);
+  };
+
+  const interval = setInterval(refreshToken, 55 * 60 * 1000);
+  return () => clearInterval(interval);
+}, []);
+
   useEffect(() => {
     const options = {
       enableHighAccuracy: true,
@@ -60,6 +74,7 @@ function App() {
 
     spotifyService.getAccessToken()
       .then((accessToken) => {
+        console.log(accessToken)
         setAccessToken(accessToken);
       });
 
@@ -124,6 +139,13 @@ function App() {
             }
             setTrack(state.track_window.current_track);
             setIsPaused(state.paused);
+          });
+
+          player.addListener('authentication_error', async ({ message }) => {
+            console.error('Auth error:', message);
+            const newToken = await spotifyService.refreshToken();
+            player._options.getOAuthToken = cb => cb(newToken);
+            player.connect();
           });
 
           player.connect().then(success => {
@@ -268,8 +290,10 @@ function App() {
   return (
     <>
    <Header/>
-    <Login />
+  {!authToken && (
 
+    <Login/>
+  )}
   {authToken && (
     <>
     <div className="search">
@@ -322,18 +346,33 @@ function App() {
     <div className='player'>
       {player && (
         <div className="player-controls">
-          <button onClick={handlePrevious}>Previous</button>
-          <button  onClick={isPaused ? handlePlay : handlePause}>
-            {isPaused ? 'Play' : 'Pause'}
+          <button onClick={handlePrevious}>
+            <img
+              src={previousIcon}
+              width="24px"
+              length="24px"
+            />
           </button>
-          <button onClick={handleNext}>Next</button>
+          <button  onClick={isPaused ? handlePlay : handlePause}>
+            <img
+              src={isPaused ? playIcon : pauseIcon}
+              width="30px"
+              length="30px"
+            />
+          </button>
+          <button onClick={handleNext}>
+          <img
+              src={nextIcon}
+              width="24px"
+              length="24px"
+            />
+          </button>
         </div>
       )}
       </div>
       </>
         )}
     <Map
-    handleClick={addTag}
     position={position}
     tagList={tagList}/>
     </>

@@ -3,12 +3,12 @@ import React from "react";
 
 export function NowPlaying({track}) {
 
-
+console.log(track)
   return (
     <>
       <div className="now-playing">
-      <h3>{track.name || track.title}</h3>
-      <p>{track.artists ? track.artists.map(a => a.name).join(', ') : track.artist}</p>
+      <p className="track-title">{track.name || track.title}</p>
+      <p className="track-artist">{track.artists ? track.artists.map(a => a.name).join(', ') : track.artist}</p>
     </div>
     </>
   )

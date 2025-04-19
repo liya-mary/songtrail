@@ -1,8 +1,3 @@
-/* @font-face {
-  font-family: 'Thicccboi Sans';
-
-} */
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -72,7 +67,24 @@ button:focus-visible {
   }
 }
 
+.songTrail {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  color: #67B996;
+}
 
+.login {
+  padding-bottom: 20px;
+}
+
+.login button {
+  font-family: "Poppins", sans-serif;
+  color: black;
+  font-weight: 500;
+  font-style: normal;
+  background-color: #67B996;
+}
 
 .search {
   position: relative;
@@ -108,6 +120,9 @@ button:focus-visible {
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .track-list {
@@ -144,4 +159,58 @@ button:focus-visible {
   margin: 5px 0 0;
   font-size: 14px;
   color: #666;
+}
+
+
+.track-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  background-color: black;
+  padding: 10px
+}
+
+
+.nowPlaying {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nowPlaying h3, .nowPlaying p {
+  margin: 0;
+}
+
+
+/* Add to your App.css */
+.player-controls {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #282828;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 1000;
+  margin-bottom: 20px;
+}
+
+.player-controls button {
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-controls button:hover {
+  background: #1ed760;
 }
