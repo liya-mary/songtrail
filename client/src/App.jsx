@@ -10,7 +10,7 @@ import playIcon from "./assets/player/play-button.png"
 import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
-import cancel from "./assets/cancel-button-black.png";
+import cancel from "./assets/cancel-button-2.png";
 import search from "./assets/search-button-black.png";
 
 function App() {
@@ -293,8 +293,8 @@ function App() {
                   <button className="search-button" onClick={handleCancel}>
                     <img
                       src={cancel}
-                      width="25px"
-                      length="25px"
+                      width="20px"
+                      length="20px"
                     />
                   </button>
                 </div>
@@ -364,7 +364,7 @@ function App() {
                   handleClick={addTag}
                   position={position}
                   tagList={tagList}
-                />
+                  />
               </>
             )}
         </>
