@@ -14,7 +14,7 @@ export default {
     return accessToken
 
   },
-// how to make them communicate?
+  
   searchSong: async function (searchInput, accessToken) {
     const searchParameters = {
       method: 'GET',

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import './App.css'
 import Map from './components/Map';
 import { Header } from './components/Header';
 import tagService from './tagService';
@@ -11,19 +10,19 @@ import playIcon from "./assets/player/play-button.png"
 import pauseIcon from "./assets/player/pause-button.png"
 import previousIcon from "./assets/player/previous-button.png"
 import nextIcon from "./assets/player/next-button.png"
-import cancel from "./assets/cancel-button.png";
-import search from "./assets/search-button.png";
+import cancel from "./assets/cancel-button-black.png";
+import search from "./assets/search-button-black.png";
 
 function App() {
 
-  // Geolocation + Tags
+  //Geolocation + Tags
   const [position, setPosition] = useState([51.505, -0.09]);
   const [tagList, setTagList] = useState([]);
 
   //Search UI
   const [searchInput, setSearchInput] = useState("");
   const [tracks, setTracks] = useState([]);
-  const [showResults, setShowResults] = useState(true);
+  const [showResults, setShowResults] = useState(false);
 
   //Spotify Auth
   const [accessToken, setAccessToken] = useState("");
@@ -53,7 +52,6 @@ function App() {
 
     const error = (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
-      // Fallback to default position if geolocation fails
       setPosition([51.505, -0.09]);
     };
 
@@ -69,8 +67,8 @@ function App() {
 
     spotifyService.getAuthToken()
       .then((authToken) => {
-        console.log(authToken)
-        setAuthToken(authToken.access_token)
+        console.log(authToken);
+        setAuthToken(authToken.access_token);
       });
     }, []);
 
@@ -82,7 +80,7 @@ function App() {
           setLastPlayedTrack(current_track.id);
         }
       }
-    }, [current_track, isPaused,]);
+    }, [current_track, isPaused]);
 
     useEffect(() => {
       if (authToken) {
@@ -123,7 +121,7 @@ function App() {
 
           player.addListener('player_state_changed', (state) => {
             if (!state) {
-              setTrack(null);  // No active track
+              setTrack(null);
               return;
             }
             setTrack(state.track_window.current_track);
@@ -148,7 +146,6 @@ function App() {
 
 
   // Clickhandle section
-
   const handlePlay = () => {
     if (player) {
       player.resume().then(() => {
@@ -201,7 +198,6 @@ function App() {
 
     setShowResults(false);
 
-    // Transfer playback to your Web Playback SDK device
     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
       method: 'PUT',
       headers: {
@@ -240,8 +236,8 @@ function App() {
     function success(pos) {
       const crd = pos.coords;
       const tagCoord = [crd.latitude, crd.longitude]
-      console.log(tagCoord)
-      setPosition(tagCoord)
+      console.log(tagCoord);
+      setPosition(tagCoord);
 
       const newTag = {
         title: track.name,
@@ -258,7 +254,7 @@ function App() {
         .catch(error => {
           console.log('Could not add a newTag', error)
         })
-      console.log(tagList)
+      console.log(tagList);
     }
 
     function error(err) {
@@ -271,106 +267,109 @@ function App() {
 
   return (
     <>
-   {!authToken && (
-      <Login/>
-   )}
+      {!authToken && (
+        <Login/>
+      )}
 
-  {authToken && (
-    <>
-    <Header/>
-    <div className='overall'>
-    <div className="search">
-        <div className="search-container">
-          <div className="search-box">
-            <input
-              className="search-input"
-              placeholder="What do you want to listen to?"
-              type="text"
-              value={searchInput}
-              onChange={event => setSearchInput(event.target.value)}
-              />
-            <button className="search-button" onClick={handleSearch}>
-              <img src={search}
-              width="25px"
-              length="25px"/>
-            </button>
-            <button className="cancel-button" onClick={handleCancel}>
-              <img
-              src={cancel}
-              width="25px"
-              length="25px"
-              />
-            </button>
-          </div>
-        </div>
-      {showResults && (
-        <div className="results-container">
-          <div className="track-list">
-            {tracks.map((track, i) => (
-              <div className="track-item"
-              key={i}
-              onClick={() => handleTrackClick(track)}
-              style={{cursor: 'pointer'}}>
-                <img
-                  src={track.album.images[0]?.url || "#"}
-                  alt={track.name}
-                  className="track-image"
+<div className='overall'>
+      {authToken && (
+        <>
+          <Header/>
+            <div className="search">
+              <div className="search-container">
+                <div className="search-box">
+                  <input
+                    className="search-input"
+                    placeholder="What do you want to listen to?"
+                    type="text"
+                    value={searchInput}
+                    onChange={event => setSearchInput(event.target.value)}
                   />
-                <div className="track-info">
-                  <h3 className="track-name">{track.name}</h3>
-                  <p className="track-artists">
-                    {track.artists.map(artist => artist.name).join(', ')}
-                  </p>
+                  <button className="search-button" onClick={handleSearch}>
+                    <img src={search}
+                    width="25px"
+                    length="25px"/>
+                  </button>
+                  <button className="search-button" onClick={handleCancel}>
+                    <img
+                      src={cancel}
+                      width="25px"
+                      length="25px"
+                    />
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-      </div>
-
-    <div className='radio'>
-    <NowPlaying track={current_track || { name: "No track selected", artists: [{name: ""}] }} />
-   <div className="container">
-           <div className="main-wrapper">
-
+              {showResults && (
+                <div className="results-container">
+                  <div className="track-list">
+                    {tracks.map((track, i) => (
+                      <div className="track-item"
+                      key={i}
+                      onClick={() => handleTrackClick(track)}
+                      style={{cursor: 'pointer'}}>
+                        <img
+                          src={track.album.images[0]?.url || "#"}
+                          alt={track.name}
+                          className="track-image"
+                        />
+                        <div className="track-info">
+                          <h3 className="track-name">{track.name}</h3>
+                          <p className="track-artists">
+                            {track.artists.map(artist => artist.name).join(', ')}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-        </div>
-    <div className='player'>
-      {player && (
-        <div className="player-controls">
-          <button onClick={handlePrevious}>
-            <img
-              src={previousIcon}
-              width="24px"
-              length="24px"
-              />
-            </button>
-            <button  onClick={isPaused ? handlePlay : handlePause}>
-            <img
-              src={isPaused ? playIcon : pauseIcon}
-              width="30px"
-              length="30px"
-              />
-          </button>
-          <button onClick={handleNext}>
-          <img
-              src={nextIcon}
-              width="24px"
-              length="24px"
-              />
-          </button>
-        </div>
+
+            {!showResults && (
+              <>
+                <div className='radio'>
+                  <NowPlaying track={current_track || { name: "No track selected", artists: [{name: ""}] }} />
+                  <div className="container">
+                    <div className="main-wrapper"></div>
+                  </div>
+                  <div className='player'>
+                    {player && (
+                      <div className="player-controls">
+                        <button onClick={handlePrevious}>
+                          <img
+                            src={previousIcon}
+                            width="24px"
+                            length="24px"
+                          />
+                        </button>
+                        <button onClick={isPaused ? handlePlay : handlePause}>
+                          <img
+                            src={isPaused ? playIcon : pauseIcon}
+                            width="30px"
+                            length="30px"
+                          />
+                        </button>
+                        <button onClick={handleNext}>
+                          <img
+                            src={nextIcon}
+                            width="24px"
+                            length="24px"
+                          />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <Map
+                  handleClick={addTag}
+                  position={position}
+                  tagList={tagList}
+                />
+              </>
+            )}
+        </>
       )}
-      </div>
-      </div>
-        </div>
-    <Map
-    handleClick={addTag}
-    position={position}
-    tagList={tagList}/>
-    </>
-  )}
+          </div>
     </>
   )
 }

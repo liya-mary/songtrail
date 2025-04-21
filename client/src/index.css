@@ -12,27 +12,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  background-color: #354259;
+  overflow: hidden;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -48,22 +38,25 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
 }
 
 /* ===== Layout Components ===== */
 .overall {
-  max-width: 500px;
+  position: fixed;
+  top: 15px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 400px;
+  min-width: 400px;
+  height: calc(100 - 15px);
+  overflow-y: auto;
+  background: #354259;
 }
 
 
@@ -86,7 +79,7 @@ button:focus-visible {
   font-style: normal;
   color: #67B996;
   font-size: 50px;
-  margin: 10px 0 15px;
+  margin: 0 0 15px;
 }
 
 /* ===== Slogan ===== */
@@ -113,7 +106,6 @@ button:focus-visible {
 
 /* ===== Search ===== */
 .search {
-  position: relative;
   max-width: 400px;
   margin: 0 auto;
 }
@@ -141,21 +133,10 @@ button:focus-visible {
 .search-button {
   padding: 5px 15px;
   background-color: #67B996;
-  color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
 }
 
-.cancel-button {
-  background-color: #282828;
-  padding-left: 9px;
-  padding-right: 9px;
-}
 
 /* ===== Track List ===== */
 .track-list {
@@ -215,7 +196,7 @@ button:focus-visible {
 
 .now-playing-image {
   width: 75px;
-  height: px;
+  height: 75px;
   object-fit: cover;
   border-radius: 4px;
   padding: 5px;
