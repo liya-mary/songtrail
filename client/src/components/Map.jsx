@@ -27,7 +27,7 @@ export function Map({position, tagList}) {
     return tag.coordinates;
   });
 
-  const blackOptions = { color: 'black'};
+  const blackOptions = { color: "#67B996"};
 
   delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
