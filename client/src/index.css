@@ -121,7 +121,7 @@ button:focus-visible {
 }
 
 .search-container {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .search-box {
@@ -129,6 +129,7 @@ button:focus-visible {
   gap: 10px;
   max-width: 600px;
   margin: 0 auto;
+  padding-top: 15px;
 }
 
 .search-input {
