@@ -12,7 +12,8 @@ import search from "./assets/search-button-black.png";
 function App() {
 
   //Geolocation + Tags
-  const [position, setPosition] = useState([51.505, -0.09]);
+  const DEFAULT_POSITION = [51.505, -0.09]
+  const [position, setPosition] = useState(DEFAULT_POSITION);
   const [tagList, setTagList] = useState([]);
 
   //Search UI
@@ -48,7 +49,7 @@ function App() {
 
     const error = (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
-      setPosition([51.505, -0.09]);
+      setPosition(DEFAULT_POSITION);
     };
 
     navigator.geolocation.getCurrentPosition(success, error, options);
@@ -179,6 +180,7 @@ function App() {
 
   // Search section
   async function handleSearch() {
+    if (!searchInput.trim()) return;
     const foundTracks = await spotifyService.searchSong(searchInput, accessToken);
     setTracks(foundTracks.tracks.items);
     setShowResults(true);
@@ -246,11 +248,11 @@ function App() {
       tagService.addTag(newTag)
         .then(newTag => {
           setTagList((prevTagList) => ([...prevTagList, newTag]))
+          console.log(tagList)
         })
         .catch(error => {
           console.log('Could not add a newTag', error)
         })
-      console.log(tagList);
     }
 
     function error(err) {
@@ -298,9 +300,9 @@ function App() {
               {showResults && (
                 <div className="results-container">
                   <div className="track-list">
-                    {tracks.map((track, i) => (
+                    {tracks.map((track) => (
                       <div className="track-item"
-                      key={i}
+                      key={track.id}
                       onClick={() => handleTrackClick(track)}
                       style={{cursor: 'pointer'}}>
                         <img
