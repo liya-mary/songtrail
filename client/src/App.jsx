@@ -1,15 +1,11 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Map from './components/Map';
 import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
 import spotifyService from './spotifyService';
 import Login from './components/login';
-import playIcon from "./assets/player/play-button.png"
-import pauseIcon from "./assets/player/pause-button.png"
-import previousIcon from "./assets/player/previous-button.png"
-import nextIcon from "./assets/player/next-button.png"
+import { playIcon, pauseIcon, previousIcon, nextIcon } from './assets/player';
 import cancel from "./assets/cancel-button-2.png";
 import search from "./assets/search-button-black.png";
 
