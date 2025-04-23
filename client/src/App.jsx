@@ -80,6 +80,9 @@ function App() {
     }, [current_track, isPaused]);
 
     useEffect(() => {
+      let script;
+
+
       if (authToken) {
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -137,6 +140,12 @@ function App() {
         if (player) {
           player.disconnect();
         }
+
+        if (script) {
+          document.body.removeChild(script);
+        }
+
+        delete window.onSpotifyWebPlaybackSDKReady;
       };
   }, [authToken]);
 

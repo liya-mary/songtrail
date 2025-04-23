@@ -7,6 +7,7 @@ SongTrail is the web app that charts your music-listening history in real time a
 - View your personal music map, with connected markers tracing your listening journey.
 
 Functionnalities to implement in future versions:
+- Authentication Token refresh (60 min limit at the moment)
 - Queue
 - Playlists
 - Trails history

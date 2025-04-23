@@ -13,7 +13,6 @@ export function Tag({tag}) {
   const day = String(date.getDate()).padStart(2, '0');
 
   return (
-    <>
       <Popup>
         <div className="songTitle">
           {tag.title}
@@ -25,7 +24,6 @@ export function Tag({tag}) {
           {day}-{month}-{year} {formattedHours}:{formattedMinutes}
         </div>
       </Popup>
-    </>
   )
 }
 

@@ -52,7 +52,7 @@ const generateRandomString = function (length) {
 };
 
 async function spotifyLogin(req, res) {
-  const scope = "streaming user-read-email user-read-private user-read-playback-state user-read-playback-state user-modify-playback-state";
+  const scope = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state";
   const state = generateRandomString(16);
   const { CLIENT_ID } = process.env;
 
