@@ -19,4 +19,4 @@ export function NowPlaying({track}) {
   )
 }
 
-export default Map
+export default NowPlaying;

@@ -4,15 +4,23 @@ import { Header } from './components/Header';
 import tagService from './tagService';
 import { NowPlaying } from './components/NowPlaying';
 import spotifyService from './spotifyService';
-import Login from './components/login';
-import { playIcon, pauseIcon, previousIcon, nextIcon } from './assets/player';
-import cancel from "./assets/cancel-button-2.png";
-import search from "./assets/search-button-black.png";
+import Login from './components/Login';
+import Search from './components/Search';
+import SearchResults from './components/SearchResults';
+import Radio from './components/Radio';
+
+
+const DEFAULT_POSITION = [51.505, -0.09];
+
+const GEOLOCATION_OPTIONS = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
 
 function App() {
 
   //Geolocation + Tags
-  const DEFAULT_POSITION = [51.505, -0.09]
   const [position, setPosition] = useState(DEFAULT_POSITION);
   const [tagList, setTagList] = useState([]);
 
@@ -36,15 +44,10 @@ function App() {
 // UseEffect section
 
   useEffect(() => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
 
     const success = (pos) => {
-      const crd = pos.coords;
-      setPosition([crd.latitude, crd.longitude]);
+      const { latitude, longitude } = pos.coords;
+      setPosition([latitude, longitude]);
     };
 
     const error = (err) => {
@@ -52,22 +55,18 @@ function App() {
       setPosition(DEFAULT_POSITION);
     };
 
-    navigator.geolocation.getCurrentPosition(success, error, options);
+    navigator.geolocation.getCurrentPosition(success, error, GEOLOCATION_OPTIONS);
 
-    tagService.getTags()
-      .then(setTagList);
+    (async () => {
+      try {
+        setTagList(await tagService.getTags());
+        setAccessToken(await spotifyService.getAccessToken());
+        setAuthToken((await spotifyService.getAuthToken()).access_token);
+      }
+      catch (err) { console.error(err); }
+    })();
 
-    spotifyService.getAccessToken()
-      .then((accessToken) => {
-        setAccessToken(accessToken);
-      });
-
-    spotifyService.getAuthToken()
-      .then((authToken) => {
-        console.log(authToken);
-        setAuthToken(authToken.access_token);
-      });
-    }, []);
+  }, []);
 
     useEffect(() => {
       if (current_track && !isPaused) {
@@ -82,7 +81,6 @@ function App() {
     useEffect(() => {
       let script;
 
-
       if (authToken) {
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -91,7 +89,7 @@ function App() {
 
         window.onSpotifyWebPlaybackSDKReady = () => {
           const player = new window.Spotify.Player({
-            name: 'Web Playback SDK',
+            name: 'Song Trail',
             getOAuthToken: cb => {cb(authToken); },
             volume: 0.5
           });
@@ -149,43 +147,13 @@ function App() {
       };
   }, [authToken]);
 
+    // Clickhandle section
 
-
-  // Clickhandle section
-  const handlePlay = () => {
-    if (player) {
-      player.resume().then(() => {
-        setIsPaused(false);
-        if (current_track) {
-          addTag(current_track);
-        }
-      });
-    }
+  const playerFunction = async (functionality) => {
+    if (!(player && player[functionality])) return;
+    await player[functionality]();
+    if (functionality === "resume" && current_track) addTag(current_track);
   };
-
-  const handlePause = () => {
-    if (player) {
-      player.pause().then(() => {
-        setIsPaused(true);
-      });
-    }
-  };
-
-  const handleNext = () => {
-    if (player) {
-      player.nextTrack().then(() => {
-      });
-    }
-  };
-
-  const handlePrevious = () => {
-    if (player) {
-      player.previousTrack().then(() => {
-      });
-    }
-  };
-
-
 
   // Search section
   async function handleSearch() {
@@ -229,156 +197,61 @@ function App() {
     });
   }
 
-
   // Tag system
-  function addTag(track) {
+  async function addTag(track) {
     if (!track) return;
 
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    function success(pos) {
+    async function success(pos) {
       const crd = pos.coords;
       const tagCoord = [crd.latitude, crd.longitude]
       console.log(tagCoord);
       setPosition(tagCoord);
 
-      const newTag = {
+      let newTag = await tagService.addTag({
         title: track.name,
         src: track.uri,
         artist: track.artists.map(a => a.name).join(', '),
         coordinates: tagCoord,
         timestamp: Date.now(),
-      }
+      })
+        .catch((err) => {console.err(err); return null;});
 
-      tagService.addTag(newTag)
-        .then(newTag => {
-          setTagList((prevTagList) => ([...prevTagList, newTag]))
-          console.log(tagList)
-        })
-        .catch(error => {
-          console.log('Could not add a newTag', error)
-        })
+      if (newTag) setTagList((prevTagList) => ([...prevTagList, newTag]));
     }
 
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
-    navigator.geolocation.getCurrentPosition(success, error, options);
+
+    navigator.geolocation.getCurrentPosition(success, error, GEOLOCATION_OPTIONS);
   }
-
-
 
   return (
     <>
-      {!authToken && (
-        <Login/>
-      )}
+    
+      {!authToken && <Login/>}
 
-<div className='overall'>
-      {authToken && (
-        <>
-          <Header/>
+      <div className='overall'>
+        {authToken && (
+          <>
+            <Header/>
             <div className="search">
-              <div className="search-container">
-                <div className="search-box">
-                  <input
-                    className="search-input"
-                    placeholder="What do you want to listen to?"
-                    type="text"
-                    value={searchInput}
-                    onChange={event => setSearchInput(event.target.value)}
-                  />
-                  <button className="search-button" onClick={handleSearch}>
-                    <img src={search}
-                    width="25px"
-                    length="25px"/>
-                  </button>
-                  <button className="search-button" onClick={handleCancel}>
-                    <img
-                      src={cancel}
-                      width="20px"
-                      length="20px"
-                    />
-                  </button>
-                </div>
-              </div>
-              {showResults && (
-                <div className="results-container">
-                  <div className="track-list">
-                    {tracks.map((track) => (
-                      <div className="track-item"
-                      key={track.id}
-                      onClick={() => handleTrackClick(track)}
-                      style={{cursor: 'pointer'}}>
-                        <img
-                          src={track.album.images[0]?.url || "#"}
-                          alt={track.name}
-                          className="track-image"
-                        />
-                        <div className="track-info">
-                          <h3 className="track-name">{track.name}</h3>
-                          <p className="track-artists">
-                            {track.artists.map(artist => artist.name).join(', ')}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <Search searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} handleCancel={handleCancel}/>
+              {showResults && <SearchResults tracks={tracks} handleTrackClick={handleTrackClick}/>}
             </div>
 
             {!showResults && (
               <>
-                <div className='radio'>
-                  <NowPlaying track={current_track || { name: "No track selected", artists: [{name: ""}] }} />
-                  <div className="container">
-                    <div className="main-wrapper"></div>
-                  </div>
-                  <div className='player'>
-                    {player && (
-                      <div className="player-controls">
-                        <button onClick={handlePrevious}>
-                          <img
-                            src={previousIcon}
-                            width="24px"
-                            length="24px"
-                          />
-                        </button>
-                        <button onClick={isPaused ? handlePlay : handlePause}>
-                          <img
-                            src={isPaused ? playIcon : pauseIcon}
-                            width="30px"
-                            length="30px"
-                          />
-                        </button>
-                        <button onClick={handleNext}>
-                          <img
-                            src={nextIcon}
-                            width="24px"
-                            length="24px"
-                          />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <Map
-                  handleClick={addTag}
-                  position={position}
-                  tagList={tagList}
-                  />
+              <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused}/>
+              <Map handleClick={addTag} position={position} tagList={tagList}/>
               </>
             )}
-        </>
-      )}
-          </div>
+
+          </>
+        )}
+      </div>
     </>
   )
 }
 
-export default App
+export default App;
