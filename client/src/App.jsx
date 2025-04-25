@@ -41,7 +41,7 @@ function App() {
   const [device_id, setDeviceId] = useState('');
 
 
-// UseEffect section
+  // UseEffect section
 
   useEffect(() => {
 
@@ -68,86 +68,101 @@ function App() {
 
   }, []);
 
-    useEffect(() => {
-      if (current_track && !isPaused) {
+  useEffect(() => {
+    if (current_track && !isPaused) {
 
-        if (lastPlayedTrack !== current_track.id) {
-          addTag(current_track);
-          setLastPlayedTrack(current_track.id);
-        }
+      if (lastPlayedTrack !== current_track.id) {
+        addTag(current_track);
+        setLastPlayedTrack(current_track.id);
       }
-    }, [current_track, isPaused]);
+    }
+  }, [current_track, isPaused]);
 
-    useEffect(() => {
-      let script;
+  useEffect(() => {
+    let script;
 
-      if (authToken) {
-        const script = document.createElement("script");
-        script.src = "https://sdk.scdn.co/spotify-player.js";
-        script.async = true;
-        document.body.appendChild(script);
+    if (authToken) {
+      const script = document.createElement("script");
+      script.src = "https://sdk.scdn.co/spotify-player.js";
+      script.async = true;
+      document.body.appendChild(script);
 
-        window.onSpotifyWebPlaybackSDKReady = () => {
-          const player = new window.Spotify.Player({
-            name: 'Song Trail',
-            getOAuthToken: cb => {cb(authToken); },
-            volume: 0.5
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const player = new window.Spotify.Player({
+          name: 'Song Trail',
+          getOAuthToken: cb => { cb(authToken); },
+          volume: 0.5
+        });
+
+        setPlayer(player);
+
+        player.addListener('ready', ({ device_id }) => {
+          console.log('Ready with Device ID', device_id);
+          setDeviceId(device_id);
+
+          fetch('https://api.spotify.com/v1/me/player', {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${authToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              device_ids: [device_id],
+              play: false
+            })
           });
+        });
 
-          setPlayer(player);
+        player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+        });
 
-          player.addListener('ready', ({ device_id }) => {
-            console.log('Ready with Device ID', device_id);
-            setDeviceId(device_id);
+        player.addListener('player_state_changed', (state) => {
+          if (!state) {
+            setTrack(null);
+            return;
+          }
+          setTrack(state.track_window.current_track);
+          setIsPaused(state.paused);
+        });
 
-            fetch('https://api.spotify.com/v1/me/player', {
-              method: 'PUT',
-              headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                device_ids: [device_id],
-                play: false
-              })
-            });
-          });
+        player.connect()
 
-          player.addListener('not_ready', ({ device_id }) => {
-            console.log('Device ID has gone offline', device_id);
-          });
-
-          player.addListener('player_state_changed', (state) => {
-            if (!state) {
-              setTrack(null);
-              return;
-            }
-            setTrack(state.track_window.current_track);
-            setIsPaused(state.paused);
-          });
-
-          player.connect().then(success => {
+          // player.addListener('initialization_error', ({ message }) => {
+          //   console.error('Init Error:', message);
+          // });
+          // player.addListener('authentication_error', ({ message }) => {
+          //   console.error('Auth Error:', message);
+          // });
+          // player.addListener('account_error', ({ message }) => {
+          //   console.error('Account Error:', message);
+          // });
+          // player.addListener('playback_error', ({ message }) => {
+          //   console.error('Playback Error:', message);
+          // });
+          .then(success => {
             if (!success) {
               console.log('Failed to connect player');
             }
           });
-        };
+
+      };
+    }
+
+    return () => {
+      if (player) {
+        player.disconnect();
       }
 
-      return () => {
-        if (player) {
-          player.disconnect();
-        }
+      if (script) {
+        document.body.removeChild(script);
+      }
 
-        if (script) {
-          document.body.removeChild(script);
-        }
-
-        delete window.onSpotifyWebPlaybackSDKReady;
-      };
+      delete window.onSpotifyWebPlaybackSDKReady;
+    };
   }, [authToken]);
 
-    // Clickhandle section
+  // Clickhandle section
 
   const playerFunction = async (functionality) => {
     if (!(player && player[functionality])) return;
@@ -184,17 +199,17 @@ function App() {
         position_ms: 0
       })
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to play track');
-      }
-      console.log('Track started playing');
-      setTrack(track);
-      setIsPaused(false);
-    })
-    .catch(error => {
-      console.error('Error playing track:', error);
-    });
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to play track');
+        }
+        console.log('Track started playing');
+        setTrack(track);
+        setIsPaused(false);
+      })
+      .catch(error => {
+        console.error('Error playing track:', error);
+      });
   }
 
   // Tag system
@@ -214,7 +229,7 @@ function App() {
         coordinates: tagCoord,
         timestamp: Date.now(),
       })
-        .catch((err) => {console.err(err); return null;});
+        .catch((err) => { console.err(err); return null; });
 
       if (newTag) setTagList((prevTagList) => ([...prevTagList, newTag]));
     }
@@ -228,22 +243,22 @@ function App() {
 
   return (
     <>
-    
-      {!authToken && <Login/>}
+
+      {!authToken && <Login />}
 
       <div className='overall'>
         {authToken && (
           <>
-            <Header/>
+            <Header />
             <div className="search">
-              <Search searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} handleCancel={handleCancel}/>
-              {showResults && <SearchResults tracks={tracks} handleTrackClick={handleTrackClick}/>}
+              <Search searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} handleCancel={handleCancel} />
+              {showResults && <SearchResults tracks={tracks} handleTrackClick={handleTrackClick} />}
             </div>
 
             {!showResults && (
               <>
-              <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused}/>
-              <Map handleClick={addTag} position={position} tagList={tagList}/>
+                <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused} />
+                <Map handleClick={addTag} position={position} tagList={tagList} />
               </>
             )}
 
