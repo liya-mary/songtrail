@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const router = require('./src/router.js');
-const connectDb = require('./src/db.js');
+import express from 'express';
+import cors from 'cors';
+import router from './router';
+import connectDb from './db';
+
 
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(router);
 
-async function startServer () {
+async function startServer() {
   try {
     await connectDb();
     console.log('DB connected');
