@@ -22,7 +22,7 @@ export function Map({position, tagList}) {
       }
     }, [center, zoom, map]);
   }
-
+  console.log("taglist:",tagList);
   let trail = tagList.map((tag) => {
     return tag.coordinates;
   });

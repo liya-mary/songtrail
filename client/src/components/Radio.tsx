@@ -2,7 +2,14 @@ import React from "react";
 import NowPlaying from "./NowPlaying";
 import { playIcon, pauseIcon, previousIcon, nextIcon } from '../assets/player';
 
-export function Radio({ current_track, player, playerFunction, isPaused }) {
+interface RadioProps {
+     current_track: any;
+     player: any;
+     playerFunction: any;
+     isPaused: any;
+}
+
+export function Radio({ current_track, player, playerFunction, isPaused }: RadioProps) {
 
      return (
           <div className='radio'>
