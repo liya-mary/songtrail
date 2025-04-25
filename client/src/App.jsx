@@ -123,7 +123,7 @@ function App() {
             return;
           }
           setTrack(state.track_window.current_track);
-          setIsPaused(state.paused);
+          // setIsPaused(state.paused);
         });
 
         player.connect()
@@ -165,8 +165,16 @@ function App() {
   // Clickhandle section
 
   const playerFunction = async (functionality) => {
+    console.log("functionality: ", functionality);
     if (!(player && player[functionality])) return;
-    await player[functionality]();
+    const playerFnality = await player[functionality]();
+    if (functionality === "resume") {
+      setIsPaused(false);
+    } else {
+      setIsPaused(true);
+    }
+
+    console.log("playerfunctionality: ", playerFnality);
     if (functionality === "resume" && current_track) addTag(current_track);
   };
 
