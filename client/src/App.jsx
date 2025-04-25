@@ -165,8 +165,12 @@ function App() {
   // Clickhandle section
 
   const playerFunction = async (functionality) => {
+    console.log("functionality: ", functionality);
     if (!(player && player[functionality])) return;
-    await player[functionality]();
+    const playerFnality = await player[functionality]();
+    setIsPaused(!isPaused);
+
+    console.log("playerfunctionality: ", playerFnality);
     if (functionality === "resume" && current_track) addTag(current_track);
   };
 
