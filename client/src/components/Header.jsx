@@ -6,9 +6,9 @@ export function Header() {
 
   return (
     <>
-     <h1>SongTrail</h1>
+     <h1 className="songTrail">SongTrail</h1>
     </>
   )
 }
 
-export default Map
+export default Header

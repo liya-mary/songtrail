@@ -1,0 +1,54 @@
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-display: swap; /* Improves loading behavior */
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Thicccboi';
+  src: url('./assets/fonts/Webfonts/THICCCBOI-ThicccAF.woff2') format('woff2');
+  font-weight: 950;
+  font-display: swap;
+}

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const tagSchema = new mongoose.Schema({
     title: String,
-    author: String,
+    artist: String,
     src: String,
     coordinates: Array,
     timestamp: Number,
