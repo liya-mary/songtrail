@@ -9,9 +9,25 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import customIconUrl from '../assets/pin.png'
 
-export function Map({position, tagList}) {
+interface tag {
+  artist: string;
+  coordinates: number[];
+  src: string;
+  timestamp: number;
+  title: string;
+  __v: number;
+  _id: string;
+}
 
-  function ChangeView({ center, zoom }) {
+interface mapProps {
+  position: number[];
+  tagList: tag[];
+  handleClick: any;
+}
+
+export function Map({position, tagList, handleClick}: mapProps) {
+
+  function ChangeView({ center, zoom }: any) {
     const map = useMap();
     useEffect(() => {
       if (center) {
@@ -21,15 +37,16 @@ export function Map({position, tagList}) {
         });
       }
     }, [center, zoom, map]);
+    return null;
   }
-  console.log("taglist:",tagList);
-  let trail = tagList.map((tag) => {
+  console.log('tagList - ', tagList);
+  let trail = tagList.map((tag: any) => {
     return tag.coordinates;
   });
 
   const blackOptions = { color: "#67B996"};
 
-  delete L.Icon.Default.prototype._getIconUrl;
+  //delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: markerIcon2x,
     iconUrl: markerIcon,
@@ -58,7 +75,7 @@ export function Map({position, tagList}) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
         <div className="tagListing">
-          {tagList.map((tag, index) => (
+          {tagList.map((tag: any, index: any) => (
             <Marker position={tag.coordinates} key={index} icon={customIcon}>
               <Tag tag={tag}/>
             </Marker>

@@ -1,7 +1,19 @@
 import React from "react";
-import placeholderImage from '../assets/pin.png'
+import placeholderImage from '../assets/pin.png';
 
-export function NowPlaying({track}) {
+interface props {
+  track: trackProps
+}
+
+interface trackProps {
+  name: string;
+  artists: { name: string; }[];
+  artist: string;
+  album: { images: { url: string }[] };
+  id: number;
+}
+
+export function NowPlaying({track}: props) {
 
   return (
     <>

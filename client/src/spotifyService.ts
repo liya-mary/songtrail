@@ -18,7 +18,7 @@ export default {
     }
   },
 
-  searchSong: async function (searchInput, accessToken) {
+  searchSong: async function (searchInput: string, accessToken: string) {
     try {
       if (!searchInput || !accessToken) throw new Error('Missing parameters');
 

@@ -1,7 +1,21 @@
 import React from "react"
-import { Popup } from "react-leaflet"
+import { Popup } from "react-leaflet";
 
-export function Tag({tag}) {
+interface tag {
+  artist: string;
+  coordinates: number[];
+  src: string;
+  timestamp: number;
+  title: string;
+  __v: number;
+  _id: string;
+}
+
+interface tagProps {
+  tag: tag
+}
+
+export function Tag({tag}: tagProps) {
 
   const date = new Date(tag.timestamp);
   const hours = date.getHours();

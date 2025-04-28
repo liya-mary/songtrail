@@ -24,7 +24,7 @@ export function Radio({ current_track, player, playerFunction, isPaused }: Radio
                                    <img
                                         src={previousIcon}
                                         width="24px"
-                                        length="24px"
+                                        height="24px"
                                    />
                               </button>
                               <button onClick={() => {
@@ -36,14 +36,14 @@ export function Radio({ current_track, player, playerFunction, isPaused }: Radio
                                    <img
                                         src={isPaused ? playIcon : pauseIcon}
                                         width="30px"
-                                        length="30px"
+                                        height="30px"
                                    />
                               </button>
                               <button onClick={() => playerFunction("nextTrack")}>
                                    <img
                                         src={nextIcon}
                                         width="24px"
-                                        length="24px"
+                                        height="24px"
                                    />
                               </button>
                          </div>
