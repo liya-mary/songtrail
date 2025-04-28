@@ -1,6 +1,20 @@
 import React from "react";
 
-export function SearchResults({tracks, handleTrackClick}) {
+
+interface track {
+  name: string;
+  artists: { name: string; }[];
+  artist: string;
+  album: { images: { url: string }[] };
+  id: number;
+}
+
+interface resultsProps {
+  tracks: track[];
+  handleTrackClick: (arg: track) => Promise<void>;
+}
+
+export function SearchResults({tracks, handleTrackClick}: resultsProps) {
 
   return (
      <div className="results-container">

@@ -9,9 +9,15 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import customIconUrl from '../assets/pin.png'
 
-export function Map({position, tagList}) {
+interface mapProps {
+  position: any;
+  tagList: any;
+  handleClick: any;
+}
 
-  function ChangeView({ center, zoom }) {
+export function Map({position, tagList, handleClick}: mapProps) {
+
+  function ChangeView({ center, zoom }: any) {
     const map = useMap();
     useEffect(() => {
       if (center) {
@@ -21,6 +27,7 @@ export function Map({position, tagList}) {
         });
       }
     }, [center, zoom, map]);
+    return null;
   }
   console.log("taglist:",tagList);
   let trail = tagList.map((tag) => {
@@ -29,7 +36,7 @@ export function Map({position, tagList}) {
 
   const blackOptions = { color: "#67B996"};
 
-  delete L.Icon.Default.prototype._getIconUrl;
+  //delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: markerIcon2x,
     iconUrl: markerIcon,

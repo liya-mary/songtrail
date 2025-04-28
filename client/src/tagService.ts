@@ -6,7 +6,7 @@ export default {
     return await response.json();
   },
 
-  addTag: async function (tag) {
+  addTag: async function (tag: any) {
     console.log('Sending Tag:', {tag})
     const response = await fetch(BASE_URL, {
       method: "POST",
