@@ -1,12 +1,22 @@
 const BASE_URL = 'http://localhost:3000/trails'
 
+interface tag {
+  artist: string;
+  coordinates: number[];
+  src: string;
+  timestamp: number;
+  title: string;
+  __v: number;
+  _id: string;
+}
+
 export default {
   getTags: async function () {
     const response = await fetch(BASE_URL);
     return await response.json();
   },
 
-  addTag: async function (tag: any) {
+  addTag: async function (tag: tag) {
     console.log('Sending Tag:', {tag})
     const response = await fetch(BASE_URL, {
       method: "POST",

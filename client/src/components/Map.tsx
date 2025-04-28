@@ -9,9 +9,19 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import customIconUrl from '../assets/pin.png'
 
+interface tag {
+  artist: string;
+  coordinates: number[];
+  src: string;
+  timestamp: number;
+  title: string;
+  __v: number;
+  _id: string;
+}
+
 interface mapProps {
-  position: any;
-  tagList: any;
+  position: number[];
+  tagList: tag[];
   handleClick: any;
 }
 
@@ -29,8 +39,8 @@ export function Map({position, tagList, handleClick}: mapProps) {
     }, [center, zoom, map]);
     return null;
   }
-  console.log("taglist:",tagList);
-  let trail = tagList.map((tag) => {
+  console.log('tagList - ', tagList);
+  let trail = tagList.map((tag: any) => {
     return tag.coordinates;
   });
 
@@ -65,7 +75,7 @@ export function Map({position, tagList, handleClick}: mapProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
         <div className="tagListing">
-          {tagList.map((tag, index) => (
+          {tagList.map((tag: any, index: any) => (
             <Marker position={tag.coordinates} key={index} icon={customIcon}>
               <Tag tag={tag}/>
             </Marker>

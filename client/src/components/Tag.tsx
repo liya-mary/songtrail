@@ -1,12 +1,18 @@
 import React from "react"
 import { Popup } from "react-leaflet";
 
+interface tag {
+  artist: string;
+  coordinates: number[];
+  src: string;
+  timestamp: number;
+  title: string;
+  __v: number;
+  _id: string;
+}
+
 interface tagProps {
-  tag: {
-    timestamp: any;
-    title: string;
-    artist: string;
-  }
+  tag: tag
 }
 
 export function Tag({tag}: tagProps) {
@@ -19,8 +25,6 @@ export function Tag({tag}: tagProps) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-
-  console.dir(tag);
 
   return (
       <Popup>
