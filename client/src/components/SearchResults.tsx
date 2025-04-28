@@ -1,6 +1,11 @@
 import React from "react";
 
-export function SearchResults({tracks, handleTrackClick}) {
+interface resultsProps {
+  tracks: Track[];
+  handleTrackClick: (arg: Track) => void;
+}
+
+export function SearchResults({tracks, handleTrackClick}: resultsProps) {
 
   return (
      <div className="results-container">

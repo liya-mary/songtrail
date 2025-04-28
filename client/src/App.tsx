@@ -9,8 +9,9 @@ import Search from './components/Search';
 import SearchResults from './components/SearchResults';
 import Radio from './components/Radio';
 
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
-const DEFAULT_POSITION = [51.505, -0.09];
+const DEFAULT_POSITION: [number, number] = [51.505, -0.09];
 
 const GEOLOCATION_OPTIONS = {
   enableHighAccuracy: true,
@@ -18,39 +19,50 @@ const GEOLOCATION_OPTIONS = {
   maximumAge: 0
 };
 
+interface Coords{
+  accuracy:number,
+  latitude:number,
+  longitude:number
+}
+interface GeoLocationPosition{
+  coords:Coords,
+}
+
+
 function App() {
 
   //Geolocation + Tags
-  const [position, setPosition] = useState(DEFAULT_POSITION);
-  const [tagList, setTagList] = useState([]);
+  const [position, setPosition] = useState<[number, number]>(DEFAULT_POSITION);
+  const [tagList, setTagList] = useState<Tag[]>([]);
 
   //Search UI
-  const [searchInput, setSearchInput] = useState("");
-  const [tracks, setTracks] = useState([]);
-  const [showResults, setShowResults] = useState(false);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [tracks, setTracks] = useState<any>([]);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   //Spotify Auth
-  const [accessToken, setAccessToken] = useState("");
-  const [authToken, setAuthToken] = useState('');
+  const [accessToken, setAccessToken] = useState<string>("");
+  const [authToken, setAuthToken] = useState<string>('');
 
   // Webplayer
-  const [player, setPlayer] = useState(undefined);
-  const [current_track, setTrack] = useState(null);
-  const [isPaused, setIsPaused] = useState(true);
-  const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
-  const [device_id, setDeviceId] = useState('');
+  const [player, setPlayer] = useState<any>(undefined);
+  const [current_track, setTrack] = useState<any>(null);
+  const [isPaused, setIsPaused] = useState<boolean>(true);
+  const [lastPlayedTrack, setLastPlayedTrack] = useState<any>(null);
+  const [device_id, setDeviceId] = useState<string>('');
 
 
   // UseEffect section
 
   useEffect(() => {
 
-    const success = (pos) => {
+    const success = (pos:GeoLocationPosition) => {
+      console.log("pos: ",pos);
       const { latitude, longitude } = pos.coords;
       setPosition([latitude, longitude]);
     };
 
-    const error = (err) => {
+    const error = (err:any) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
       setPosition(DEFAULT_POSITION);
     };
@@ -87,13 +99,15 @@ function App() {
       script.async = true;
       document.body.appendChild(script);
 
+      
+
       window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new window.Spotify.Player({
           name: 'Song Trail',
           getOAuthToken: cb => { cb(authToken); },
           volume: 0.5
         });
-
+        console.log('player: ',player);
         setPlayer(player);
 
         player.addListener('ready', ({ device_id }) => {
@@ -122,6 +136,7 @@ function App() {
             setTrack(null);
             return;
           }
+          console.log("current track : ",state.track_window.current_track);
           setTrack(state.track_window.current_track);
           // setIsPaused(state.paused);
         });
@@ -158,13 +173,14 @@ function App() {
         document.body.removeChild(script);
       }
 
-      delete window.onSpotifyWebPlaybackSDKReady;
+      (window as any).onSpotifyWebPlaybackSDKReady = undefined;
+      
     };
   }, [authToken]);
 
   // Clickhandle section
 
-  const playerFunction = async (functionality) => {
+  const playerFunction = async (functionality:string) => {
     console.log("functionality: ", functionality);
     if (!(player && player[functionality])) return;
     const playerFnality = await player[functionality]();
@@ -182,6 +198,7 @@ function App() {
   async function handleSearch() {
     if (!searchInput.trim()) return;
     const foundTracks = await spotifyService.searchSong(searchInput, accessToken);
+    console.log("tracks: ",foundTracks.tracks.items);
     setTracks(foundTracks.tracks.items);
     setShowResults(true);
   }
@@ -191,7 +208,7 @@ function App() {
     setShowResults(false);
   }
 
-  function handleTrackClick(track) {
+  function handleTrackClick(track: Track) {
     if (!player || !authToken) return;
 
     setShowResults(false);
@@ -221,28 +238,27 @@ function App() {
   }
 
   // Tag system
-  async function addTag(track) {
+  async function addTag(track: Track) {
     if (!track) return;
 
-    async function success(pos) {
+    async function success(pos: { coords: { latitude: number; longitude: number; } }) {
       const crd = pos.coords;
-      const tagCoord = [crd.latitude, crd.longitude]
-      console.log(tagCoord);
+      const tagCoord: [number, number] = [crd.latitude, crd.longitude]
       setPosition(tagCoord);
 
       let newTag = await tagService.addTag({
         title: track.name,
         src: track.uri,
-        artist: track.artists.map(a => a.name).join(', '),
+        artist: track.artists.map((a: { name: any; }) => a.name).join(', '),
         coordinates: tagCoord,
         timestamp: Date.now(),
       })
-        .catch((err) => { console.err(err); return null; });
+        .catch((err) => { console.log(err); return null; });
 
       if (newTag) setTagList((prevTagList) => ([...prevTagList, newTag]));
     }
 
-    function error(err) {
+    function error(err: { code: any; message: any; }) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
