@@ -11,35 +11,13 @@ import Radio from './components/Radio';
 
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
-
-
-
-const DEFAULT_POSITION = [51.505, -0.09];
+const DEFAULT_POSITION: [number, number] = [51.505, -0.09];
 
 const GEOLOCATION_OPTIONS = {
   enableHighAccuracy: true,
   timeout: 5000,
   maximumAge: 0
 };
-
-interface Tag{
-  artist:string;
-  coordinates:number[];
-  src:string;
-  title:string;
-
-}
-
-interface Album{
-  album_type:string,
-}
-
-interface Artist{
-  album_type:string,
-}
-interface Track{
-
-}
 
 interface Coords{
   accuracy:number,
@@ -54,7 +32,7 @@ interface GeoLocationPosition{
 function App() {
 
   //Geolocation + Tags
-  const [position, setPosition] = useState<number[]>(DEFAULT_POSITION);
+  const [position, setPosition] = useState<[number, number]>(DEFAULT_POSITION);
   const [tagList, setTagList] = useState<Tag[]>([]);
 
   //Search UI
@@ -120,6 +98,8 @@ function App() {
       script.src = "https://sdk.scdn.co/spotify-player.js";
       script.async = true;
       document.body.appendChild(script);
+
+      
 
       window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new window.Spotify.Player({
@@ -228,7 +208,7 @@ function App() {
     setShowResults(false);
   }
 
-  function handleTrackClick(track: { uri: any; }) {
+  function handleTrackClick(track: Track) {
     if (!player || !authToken) return;
 
     setShowResults(false);
@@ -258,13 +238,12 @@ function App() {
   }
 
   // Tag system
-  async function addTag(track: { name: any; uri: any; artists: any[]; }) {
+  async function addTag(track: Track) {
     if (!track) return;
 
-    async function success(pos: { coords: any; }) {
+    async function success(pos: { coords: { latitude: number; longitude: number; } }) {
       const crd = pos.coords;
-      const tagCoord = [crd.latitude, crd.longitude]
-      console.log(tagCoord);
+      const tagCoord: [number, number] = [crd.latitude, crd.longitude]
       setPosition(tagCoord);
 
       let newTag = await tagService.addTag({

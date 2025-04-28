@@ -1,17 +1,8 @@
 import React from "react";
 
-
-interface track {
-  name: string;
-  artists: { name: string; }[];
-  artist: string;
-  album: { images: { url: string }[] };
-  id: number;
-}
-
 interface resultsProps {
-  tracks: track[];
-  handleTrackClick: (arg: track) => Promise<void>;
+  tracks: Track[];
+  handleTrackClick: (arg: Track) => void;
 }
 
 export function SearchResults({tracks, handleTrackClick}: resultsProps) {

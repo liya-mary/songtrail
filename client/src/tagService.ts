@@ -6,8 +6,6 @@ interface tag {
   src: string;
   timestamp: number;
   title: string;
-  __v: number;
-  _id: string;
 }
 
 export default {

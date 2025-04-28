@@ -9,19 +9,9 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import customIconUrl from '../assets/pin.png'
 
-interface tag {
-  artist: string;
-  coordinates: number[];
-  src: string;
-  timestamp: number;
-  title: string;
-  __v: number;
-  _id: string;
-}
-
 interface mapProps {
-  position: number[];
-  tagList: tag[];
+  position: [number, number];
+  tagList: Tag[];
   handleClick: any;
 }
 
