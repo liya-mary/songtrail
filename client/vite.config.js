@@ -5,7 +5,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react(), basicSsl()],
   test: {
+    globals: true,
     environment: 'jsdom',
+    setupFiles: './test.setup.js'
   },
   server: {
     proxy: {
