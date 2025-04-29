@@ -19,7 +19,7 @@ export function Radio({ current_track, player, playerFunction, isPaused }: Radio
                </div>
                <div className='player'>
                     {player && (
-                         <div className="player-controls">
+                         <div className="player-controls" data-testid="player-controls">
                               <button onClick={() => playerFunction("previousTrack")}>
                                    <img
                                         src={previousIcon}

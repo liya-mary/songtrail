@@ -16,17 +16,18 @@ export function Search({searchInput, setSearchInput, handleSearch, handleCancel}
           <div className="search-box">
           <input
           className="search-input"
+          data-testid="search-input"
           placeholder="What do you want to listen to?"
           type="text"
           value={searchInput}
           onChange={event => setSearchInput(event.target.value)}
           />
-          <button className="search-button" onClick={handleSearch}>
+          <button className="search-button" data-testid="search-button" onClick={handleSearch}>
           <img src={search}
           width="25px"
           height="25px"/>
           </button>
-          <button className="search-button" onClick={handleCancel}>
+          <button className="search-button" data-testid="cancel-button" onClick={handleCancel}>
           <img
                src={cancel}
                width="20px"
