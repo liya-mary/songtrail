@@ -17,7 +17,7 @@ router.get('/spotify/token', getToken);
 
 router.get('/auth/login', spotifyLogin);
 router.get('/auth/callback', spotifyAuth);
-router.get('/auth/token', returnToken)
+router.get('/auth/token', returnToken);
 
 
 export default router;

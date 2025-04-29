@@ -58,7 +58,7 @@ const generateRandomString = function (length:number) {
 export async function spotifyLogin(req:Request, res:Response) {
 
 
-  const scope:string = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state";
+  const scope:string = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state user-library-read user-library-modify";
   const state:string = generateRandomString(16);
   const { CLIENT_ID } = process.env;
   console.log("client id : ", CLIENT_ID)
@@ -109,7 +109,7 @@ export async function spotifyAuth(req:Request, res:Response)  {
 export async function returnToken(req:Request, res:Response) {
   if (!access_token) {
     res.status(401).json({ error: "No token available" });
-    return ;
+    return;
   }
   res.json({ access_token: access_token });
 }

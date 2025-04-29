@@ -29,7 +29,6 @@ export function Map({position, tagList, handleClick}: mapProps) {
     }, [center, zoom, map]);
     return null;
   }
-  console.log('tagList - ', tagList);
   let trail = tagList.map((tag: any) => {
     return tag.coordinates;
   });

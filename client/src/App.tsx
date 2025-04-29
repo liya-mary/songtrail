@@ -10,6 +10,7 @@ import SearchResults from './components/SearchResults';
 import Radio from './components/Radio';
 
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import Favorites from './components/Favorites';
 
 const DEFAULT_POSITION: [number, number] = [51.505, -0.09];
 
@@ -51,6 +52,8 @@ function App() {
   const [lastPlayedTrack, setLastPlayedTrack] = useState<any>(null);
   const [device_id, setDeviceId] = useState<string>('');
 
+  // Favorites
+  const [favorites, setFavorites] = useState<Track[]>([]);
 
   // UseEffect section
 
@@ -73,7 +76,7 @@ function App() {
       try {
         setTagList(await tagService.getTags());
         setAccessToken(await spotifyService.getAccessToken());
-        setAuthToken((await spotifyService.getAuthToken()).access_token);
+        setAuthToken((await spotifyService.getAuthToken()));
       }
       catch (err) { console.error(err); }
     })();
@@ -94,12 +97,13 @@ function App() {
     let script;
 
     if (authToken) {
+
+      getAndSetFavoriteSongs();
+
       const script = document.createElement("script");
       script.src = "https://sdk.scdn.co/spotify-player.js";
       script.async = true;
       document.body.appendChild(script);
-
-      
 
       window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new window.Spotify.Player({
@@ -237,6 +241,24 @@ function App() {
       });
   }
 
+  function getAndSetFavoriteSongs() {
+    spotifyService.getFavoritedSongs(authToken, 0)
+    .then((tracks) => {
+      setFavorites([...tracks]);
+    })
+    .catch((err) => console.log(err));
+  }
+
+  function onFavorite(track: Track) {
+      spotifyService.addFavoriteSong(authToken, track.id)
+        .then(() => {
+          getAndSetFavoriteSongs();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
+
   // Tag system
   async function addTag(track: Track) {
     if (!track) return;
@@ -269,10 +291,10 @@ function App() {
     <>
 
       {!authToken && <Login />}
-
+      
       <div className='overall'>
         {authToken && (
-          <>
+          <div className="overall-inner">
             <Header />
             <div className="search">
               <Search searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} handleCancel={handleCancel} />
@@ -280,13 +302,16 @@ function App() {
             </div>
 
             {!showResults && (
-              <>
-                <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused} />
-                <Map handleClick={addTag} position={position} tagList={tagList} />
-              </>
+              <div className="radio-map-favorites-container">
+                <div className="radio-map-wrapper">
+                  <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused} onFavorite={onFavorite} />
+                  <Map handleClick={addTag} position={position} tagList={tagList} />
+                </div>
+                <Favorites tracks={favorites}/>
+              </div>
             )}
 
-          </>
+          </div>
         )}
       </div>
     </>

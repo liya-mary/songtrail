@@ -1,19 +1,23 @@
 import React from "react";
 import NowPlaying from "./NowPlaying";
-import { playIcon, pauseIcon, previousIcon, nextIcon } from '../assets/player';
+import { playIcon, pauseIcon, previousIcon, nextIcon, star } from '../assets/player';
 
 interface RadioProps {
      current_track: any;
      player: any;
      playerFunction: any;
      isPaused: any;
+     onFavorite: any;
 }
 
-export function Radio({ current_track, player, playerFunction, isPaused }: RadioProps) {
+export function Radio({ current_track, player, playerFunction, isPaused, onFavorite }: RadioProps) {
 
      return (
           <div className='radio'>
-               <NowPlaying track={current_track || { name: "No track selected", artists: [{ name: "" }] }} />
+               <div className='radio-wrapper'>
+                    <NowPlaying track={current_track || { name: "No track selected", artists: [{ name: "" }] }} />
+
+               </div>
                <div className="container">
                     <div className="main-wrapper"></div>
                </div>
@@ -42,6 +46,13 @@ export function Radio({ current_track, player, playerFunction, isPaused }: Radio
                               <button onClick={() => playerFunction("nextTrack")}>
                                    <img
                                         src={nextIcon}
+                                        width="24px"
+                                        height="24px"
+                                   />
+                              </button>
+                              <button onClick={() => onFavorite(current_track)}>
+                                   <img
+                                        src={star}
                                         width="24px"
                                         height="24px"
                                    />

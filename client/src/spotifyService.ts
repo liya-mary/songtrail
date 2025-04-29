@@ -43,6 +43,59 @@ export default {
     }
   },
 
+  getFavoritedSongs: async function (accessToken: string, offset: number) {
+    try {
+      if (!accessToken) throw new Error('Missing parameters');
+
+      const searchParameters = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + accessToken
+        },
+      };
+
+      const params = new URLSearchParams({ limit: '15', offset: offset.toString() });
+      const url = `https://api.spotify.com/v1/me/tracks?${params.toString()}`;
+
+      const response = await fetch(url, searchParameters);
+      const responseJson = await response.json();
+
+      console.log(responseJson);
+
+      return responseJson.items.map((item: any) => item.track);
+    } catch (error) {
+      console.error('Error in getFavoritedSongs:', error);
+      throw error;
+    }
+  },
+
+  addFavoriteSong: async function (accessToken: string, trackId: string | number) {
+    try {
+      if (!accessToken) throw new Error('Missing parameters');
+
+      const searchParameters = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + accessToken
+        },
+        body: JSON.stringify({
+          ids: [trackId]
+        })
+      };
+
+      //const params = new URLSearchParams({ ids: `${trackId}` });
+      const url = "https://api.spotify.com/v1/me/tracks"; //?${params.toString()}`;
+
+      const response = await fetch(url, searchParameters);
+
+      return response;
+    } catch (error) {
+      console.error('Error in addFavoriteSong:', error);
+      throw error;
+    }
+  },
 
   getAuthToken: async function () {
     try {
@@ -51,7 +104,7 @@ export default {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
-      return json;
+      return json.access_token;
     } catch (error) {
       console.error('Error in getAuthToken:', error);
       throw error;

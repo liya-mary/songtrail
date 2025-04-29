@@ -20,8 +20,6 @@ exports.spotifyAuth = spotifyAuth;
 exports.returnToken = returnToken;
 const models_1 = __importDefault(require("./models"));
 const url_1 = require("url");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 var access_token = null;
 function getTags(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -77,7 +75,7 @@ const generateRandomString = function (length) {
 };
 function spotifyLogin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const scope = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state";
+        const scope = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state user-library-read user-library-modify";
         const state = generateRandomString(16);
         const { CLIENT_ID } = process.env;
         console.log("client id : ", CLIENT_ID);
