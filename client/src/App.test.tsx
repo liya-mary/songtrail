@@ -12,3 +12,4 @@ describe('App', () => {
     // check if App components renders headline
   });
 });
+
