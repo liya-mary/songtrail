@@ -2,10 +2,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Tags from './models';
 import { URLSearchParams } from "url";
-import dotenv from 'dotenv'; 
-
-dotenv.config();  
-
 
 var access_token: string|null = null
 
