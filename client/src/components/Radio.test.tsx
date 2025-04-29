@@ -21,10 +21,6 @@ describe('Radio', () => {
      render(<Radio current_track={mockTrack} player={true} playerFunction={null} isPaused={true}/>);
   });
 
-  it('renders Radio with a player', () => {
-     render(<Radio current_track={mockTrack} player={true} playerFunction={null} isPaused={true}/>);
-  });
-
   it('handles pause, play, next, last song button clicks with playerFunction', () => {
      let fn = vi.fn();
      render(<Radio current_track={mockTrack} player={true} playerFunction={fn} isPaused={true}/>);
