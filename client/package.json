@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@spotify/web-api-ts-sdk": "^1.2.0",
+    "@testing-library/dom": "^10.4.0",
     "@types/spotify-api": "^0.0.25",
     "leaflet": "^1.9.4",
     "react": "^19.0.0-rc.1",
