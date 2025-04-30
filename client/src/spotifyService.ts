@@ -1,6 +1,7 @@
 
 export default {
   getAccessToken: async function () {
+    //for user
     try {
       const response = await fetch('http://localhost:3000/spotify/token');
 
@@ -11,6 +12,8 @@ export default {
 
       const tokenObject = await response.json();
       const accessToken = tokenObject.access_token;
+      // const accessToken=await response.json();
+      // console.log("app access token from server: ",accessToken);
       return accessToken;
     } catch (error) {
       console.error('Error in getAccessToken:', error);
@@ -45,6 +48,7 @@ export default {
 
 
   getAuthToken: async function () {
+    //for admin/app-fethces public data
     try {
       const response = await fetch('/auth/token');
       if (!response.ok) {

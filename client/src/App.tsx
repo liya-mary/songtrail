@@ -9,7 +9,6 @@ import Search from './components/Search';
 import SearchResults from './components/SearchResults';
 import Radio from './components/Radio';
 
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 const DEFAULT_POSITION: [number, number] = [51.505, -0.09];
 
@@ -71,8 +70,12 @@ function App() {
 
     (async () => {
       try {
+        //web sdk-build player interact with spotify change song.
+        //spotify api-serach song thing
         setTagList(await tagService.getTags());
+        //search bar 
         setAccessToken(await spotifyService.getAccessToken());
+        //user access play
         setAuthToken((await spotifyService.getAuthToken()).access_token);
       }
       catch (err) { console.error(err); }
