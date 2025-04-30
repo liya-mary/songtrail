@@ -9,7 +9,7 @@ export function Favorites({tracks}: favoritesProps) {
   return (
      <div className="favorites-container">
           <h1>Favorites</h1>
-          {tracks.map((track, index) => (
+          {tracks.length > 0 && tracks.map((track, index) => (
                <div className="individual-favorite" key={index}>
                     <img width="50px" height="50px" src={track.album.images[0].url}></img>
                     <div>
@@ -17,6 +17,13 @@ export function Favorites({tracks}: favoritesProps) {
                     </div>
                </div>
           ))}
+          {tracks.length == 0 && (
+               <div className="individual-favorite">
+                    <div>
+                         Loading...
+                    </div>
+               </div>
+          )}
      </div>
   )
 }

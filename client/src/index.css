@@ -20,7 +20,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: #354259;
-  overflow: hidden;
+  overflow: auto;
 }
 
 
@@ -242,6 +242,7 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  max-width: 400px;
   background-color: #282828;
   border: 1px solid #282828;
   border-radius: 10px;

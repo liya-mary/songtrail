@@ -40,6 +40,7 @@ function App() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [tracks, setTracks] = useState<any>([]);
   const [showResults, setShowResults] = useState<boolean>(false);
+  const [showFavorites, setShowFavorites] = useState<boolean>(false);
 
   //Spotify Auth
   const [accessToken, setAccessToken] = useState<string>("");
@@ -142,7 +143,7 @@ function App() {
           }
           console.log("current track : ",state.track_window.current_track);
           setTrack(state.track_window.current_track);
-          // setIsPaused(state.paused);
+          setIsPaused(state.paused);
         });
 
         player.connect()
@@ -241,15 +242,22 @@ function App() {
       });
   }
 
+  function toggleShowFavorites() {
+    setShowFavorites(!showFavorites);
+  }
+
   function getAndSetFavoriteSongs() {
-    spotifyService.getFavoritedSongs(authToken, 0)
-    .then((tracks) => {
-      setFavorites([...tracks]);
-    })
-    .catch((err) => console.log(err));
+    spotifyService.getAllFavoritedSongs(authToken)
+      .then((tracks) => {
+        setFavorites(tracks);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
   }
 
   function onFavorite(track: Track) {
+      //setFavorites([...favorites, track]);
       spotifyService.addFavoriteSong(authToken, track.id)
         .then(() => {
           getAndSetFavoriteSongs();
@@ -258,6 +266,17 @@ function App() {
           console.log(err);
         });
   }
+
+  function onUnfavorite(track: Track) {
+    //setFavorites(favorites.filter((favorite) => (favorite.id !== track.id)));
+    spotifyService.removeFavoriteSong(authToken, track.id)
+      .then(() => {
+        getAndSetFavoriteSongs();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
 
   // Tag system
   async function addTag(track: Track) {
@@ -289,25 +308,24 @@ function App() {
 
   return (
     <>
-
-      {!authToken && <Login />}
       
       <div className='overall'>
+        {!authToken && <Login />}
         {authToken && (
           <div className="overall-inner">
             <Header />
             <div className="search">
-              <Search searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} handleCancel={handleCancel} />
+              <Search searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} handleCancel={handleCancel} toggleShowFavorites={toggleShowFavorites}/>
               {showResults && <SearchResults tracks={tracks} handleTrackClick={handleTrackClick} />}
             </div>
 
             {!showResults && (
               <div className="radio-map-favorites-container">
                 <div className="radio-map-wrapper">
-                  <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused} onFavorite={onFavorite} />
+                  <Radio current_track={current_track} player={player} playerFunction={playerFunction} isPaused={isPaused} onFavorite={onFavorite} onUnfavorite={onUnfavorite} favorites={favorites}/>
                   <Map handleClick={addTag} position={position} tagList={tagList} />
                 </div>
-                <Favorites tracks={favorites}/>
+                {showFavorites && <Favorites tracks={favorites}/>}
               </div>
             )}
 

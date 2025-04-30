@@ -1,15 +1,17 @@
 import React from "react";
 import cancel from "../assets/cancel-button-2.png";
 import search from "../assets/search-button-black.png";
+import { star3 } from "../assets/player";
 
 interface searchProps {
      searchInput: string;
      setSearchInput: React.Dispatch<React.SetStateAction<string>>;
      handleSearch: () => Promise<void>;
      handleCancel: () => void;
+     toggleShowFavorites: () => void;
 }
 
-export function Search({searchInput, setSearchInput, handleSearch, handleCancel}: searchProps) {
+export function Search({searchInput, setSearchInput, handleSearch, handleCancel, toggleShowFavorites}: searchProps) {
 
   return (
      <div className="search-container">
@@ -30,6 +32,13 @@ export function Search({searchInput, setSearchInput, handleSearch, handleCancel}
           <button className="search-button" data-testid="cancel-button" onClick={handleCancel}>
           <img
                src={cancel}
+               width="20px"
+               height="20px"
+          />
+          </button>
+          <button className="search-button" data-testid="cancel-button" onClick={toggleShowFavorites}>
+          <img
+               src={star3}
                width="20px"
                height="20px"
           />

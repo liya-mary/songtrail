@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NowPlaying from "./NowPlaying";
-import { playIcon, pauseIcon, previousIcon, nextIcon, star } from '../assets/player';
+import { playIcon, pauseIcon, previousIcon, nextIcon, star, star2 } from '../assets/player';
 
 interface RadioProps {
      current_track: any;
@@ -8,9 +8,21 @@ interface RadioProps {
      playerFunction: any;
      isPaused: any;
      onFavorite: any;
+     onUnfavorite: any;
+     favorites: any;
 }
 
-export function Radio({ current_track, player, playerFunction, isPaused, onFavorite }: RadioProps) {
+export function Radio({ current_track, player, playerFunction, isPaused, onFavorite, onUnfavorite, favorites }: RadioProps) {
+
+     const [favorited, setFavorited] = useState(false);
+
+     useEffect(() => {
+          let set = false;
+          favorites.forEach((track: any) => {
+               if (track.id === current_track.id) set = true;
+          });
+          setFavorited(set);
+     }, [current_track, favorites]);
 
      return (
           <div className='radio'>
@@ -50,9 +62,9 @@ export function Radio({ current_track, player, playerFunction, isPaused, onFavor
                                         height="24px"
                                    />
                               </button>
-                              <button onClick={() => onFavorite(current_track)}>
+                              <button onClick={() => {favorited ? setFavorited(false) : setFavorited(true); favorited ? onUnfavorite(current_track) : onFavorite(current_track)}}>
                                    <img
-                                        src={star}
+                                        src={favorited ? star : star2}
                                         width="24px"
                                         height="24px"
                                    />

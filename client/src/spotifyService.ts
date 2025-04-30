@@ -43,7 +43,7 @@ export default {
     }
   },
 
-  getFavoritedSongs: async function (accessToken: string, offset: number) {
+  getFavoritedSongs: async function (accessToken: string, offset: number, limit: number = 50) {
     try {
       if (!accessToken) throw new Error('Missing parameters');
 
@@ -55,7 +55,7 @@ export default {
         },
       };
 
-      const params = new URLSearchParams({ limit: '15', offset: offset.toString() });
+      const params = new URLSearchParams({ limit: limit.toString(), offset: offset.toString() });
       const url = `https://api.spotify.com/v1/me/tracks?${params.toString()}`;
 
       const response = await fetch(url, searchParameters);
@@ -63,7 +63,28 @@ export default {
 
       console.log(responseJson);
 
-      return responseJson.items.map((item: any) => item.track);
+      return responseJson;
+    } catch (error) {
+      console.error('Error in getFavoritedSongs:', error);
+      throw error;
+    }
+  },
+
+  getAllFavoritedSongs: async function (accessToken: string) {
+
+    let res: any[] = [];
+    let offset = 0;
+
+    try {
+      let responseJson: any = { next: true };
+      while (responseJson.next) {
+        responseJson = await this.getFavoritedSongs(accessToken, offset, 50);
+        if (responseJson.items) {
+          res = [...res, ...responseJson.items.map((item: any) => item.track)];
+          offset += 50;
+        }
+      }
+      return res;
     } catch (error) {
       console.error('Error in getFavoritedSongs:', error);
       throw error;
@@ -76,6 +97,33 @@ export default {
 
       const searchParameters = {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + accessToken
+        },
+        body: JSON.stringify({
+          ids: [trackId]
+        })
+      };
+
+      //const params = new URLSearchParams({ ids: `${trackId}` });
+      const url = "https://api.spotify.com/v1/me/tracks"; //?${params.toString()}`;
+
+      const response = await fetch(url, searchParameters);
+
+      return response;
+    } catch (error) {
+      console.error('Error in addFavoriteSong:', error);
+      throw error;
+    }
+  },
+
+  removeFavoriteSong: async function (accessToken: string, trackId: string | number) {
+    try {
+      if (!accessToken) throw new Error('Missing parameters');
+
+      const searchParameters = {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + accessToken
