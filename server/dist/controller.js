@@ -20,7 +20,12 @@ exports.spotifyAuth = spotifyAuth;
 exports.returnToken = returnToken;
 const models_1 = __importDefault(require("./models"));
 const url_1 = require("url");
-var access_token = null;
+var userAccessToken = null;
+var userRefreshToken = null;
+var userAccessTokenExpiry = null;
+var appAccessToken = null;
+var appRefreshToken = null;
+var appAccessTokenExpiry = null;
 function getTags(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -45,19 +50,29 @@ function addTag(req, res) {
         }
     });
 }
+//creating new token everytime getToken called search function
 function getToken(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { CLIENT_ID, CLIENT_SECRET } = process.env;
-            const response = yield fetch('https://accounts.spotify.com/api/token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
-            });
-            const tokenObject = yield response.json();
-            res.status(200).json(tokenObject);
+            if (Date.now() > appAccessTokenExpiry) {
+                const response = yield fetch('https://accounts.spotify.com/api/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
+                });
+                const tokenObject = yield response.json();
+                appAccessToken = tokenObject.access_token;
+                appAccessTokenExpiry = Date.now() + tokenObject.expires_in * 1000;
+                console.log("new app token: ", appAccessToken);
+                res.status(200).json({ access_token: appAccessToken });
+            }
+            else {
+                console.log("saved app token: ", appAccessToken);
+                res.status(200).json({ access_token: appAccessToken });
+            }
         }
         catch (err) {
             console.log(err);
@@ -65,6 +80,64 @@ function getToken(req, res) {
         }
     });
 }
+// export async function getToken(req:Request, res:Response):Promise<any>{
+//   try {
+//     const { CLIENT_ID, CLIENT_SECRET } = process.env;
+//     if (!(appRefreshToken && CLIENT_SECRET && CLIENT_ID)) {
+//       return null;
+//     }
+//     if(!appAccessToken ||Date.now()>appAccessTokenExpiry){
+//       const authOptions = {
+//         url: "https://accounts.spotify.com/api/token",
+//         headers: {
+//           "content-type": "application/x-www-form-urlencoded",
+//           Authorization:
+//             "Basic " +
+//             Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
+//         },
+//         form: {
+//           grant_type: "client_credentials",
+//         },
+//         json: true,
+//       };
+//       const response = await fetch(authOptions.url, {
+//         method: "post",
+//         body: new URLSearchParams(authOptions.form),
+//         headers: authOptions.headers,
+//       });
+//       const res_data = await response.json();
+//       appAccessToken=res_data.access_token;
+//       console.log("app access token: ",appAccessToken);
+//       appAccessTokenExpiry=Date.now()+res_data.expires_in *1000;
+//       console.log("app token updated..");
+//       console.log(appAccessToken);
+//       return res.status(200).json({ access_token: appAccessToken }); 
+//     }else{
+//       console.log("app saved token..",appAccessToken);
+//       return res.status(200).json({ access_token: appAccessToken });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err)
+//   }
+// }
+// export async function getToken(req:Request, res:Response) {
+//   try {
+//     const { CLIENT_ID, CLIENT_SECRET } = process.env;
+//     const response = await fetch('https://accounts.spotify.com/api/token', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded'
+//       },
+//       body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
+//     })
+//     const tokenObject = await response.json()
+//     res.status(200).json(tokenObject)
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err)
+//   }
+// }
 const generateRandomString = function (length) {
     var text = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -73,6 +146,10 @@ const generateRandomString = function (length) {
     }
     return text;
 };
+//on login with spotify it gives an access token for user
+//reqest user authorizaton so that app can access spotify resources
+//spotify api-
+//play-spotify login
 function spotifyLogin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const scope = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state user-library-read user-library-modify";
@@ -89,6 +166,7 @@ function spotifyLogin(req, res) {
         res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
     });
 }
+//request an access token of  user
 function spotifyAuth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const code = req.query.code;
@@ -112,16 +190,60 @@ function spotifyAuth(req, res) {
             return;
         }
         const tokenData = yield tokenResponse.json();
-        access_token = tokenData.access_token;
+        userAccessToken = tokenData.access_token;
+        userRefreshToken = tokenData.refresh_token;
+        console.log("user refresh tokens: ", userRefreshToken);
+        console.log("user expires in: ", tokenData.expires_in);
+        userAccessTokenExpiry = Date.now() + tokenData.expires_in * 1000;
         res.redirect('https://localhost:5173');
     });
 }
 function returnToken(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!access_token) {
-            res.status(401).json({ error: "No token available" });
-            return;
+        // if (!userAccessToken) {
+        //   res.status(401).json({ error: "No token available" });
+        //   return ;
+        // }
+        // res.json({ access_token: userAccessToken });
+        try {
+            const { CLIENT_ID, CLIENT_SECRET } = process.env;
+            if (!(userRefreshToken && CLIENT_SECRET && CLIENT_ID)) {
+                return null;
+            }
+            if (!userAccessToken || Date.now() > userAccessTokenExpiry) {
+                const authOptions = {
+                    url: "https://accounts.spotify.com/api/token",
+                    headers: {
+                        "content-type": "application/x-www-form-urlencoded",
+                        Authorization: "Basic " +
+                            Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
+                    },
+                    form: {
+                        grant_type: "refresh_token",
+                        refresh_token: userRefreshToken,
+                    },
+                    json: true,
+                };
+                const response = yield fetch(authOptions.url, {
+                    method: "post",
+                    body: new url_1.URLSearchParams(authOptions.form),
+                    headers: authOptions.headers,
+                });
+                const res_data = yield response.json();
+                userAccessToken = res_data.access_token;
+                userAccessTokenExpiry = Date.now() + res_data.expires_in * 1000;
+                console.log("user token updated..");
+                console.log(userAccessToken);
+                res.status(200).json({ access_token: userAccessToken });
+            }
+            else {
+                console.log("user saved token..", userAccessToken);
+                return res.status(200).json({ access_token: userAccessToken });
+            }
         }
-        res.json({ access_token: access_token });
+        catch (err) {
+            console.log(err);
+            res.status(500).json({ err });
+        }
     });
 }

@@ -17,6 +17,7 @@ export function Radio({ current_track, player, playerFunction, isPaused, onFavor
      const [favorited, setFavorited] = useState(false);
 
      useEffect(() => {
+          if (!favorites) return;
           let set = false;
           favorites.forEach((track: any) => {
                if (track.id === current_track.id) set = true;

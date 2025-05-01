@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import Tag from './Tag';
 import Map from './Map';
 
 const mockTagList = [

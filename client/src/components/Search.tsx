@@ -36,7 +36,7 @@ export function Search({searchInput, setSearchInput, handleSearch, handleCancel,
                height="20px"
           />
           </button>
-          <button className="search-button" data-testid="cancel-button" onClick={toggleShowFavorites}>
+          <button className="search-button" data-testid="favorites-button" onClick={toggleShowFavorites}>
           <img
                src={star3}
                width="20px"

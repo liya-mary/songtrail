@@ -14,16 +14,16 @@ const mockTrack = {
 
 describe('Radio', () => {
   it('renders Radio without a player', () => {
-    render(<Radio current_track={mockTrack} player={null} playerFunction={null} isPaused={true}/>);
+    render(<Radio current_track={mockTrack} player={null} playerFunction={null} isPaused={true} favorites={[mockTrack]} onFavorite={vi.fn()} onUnfavorite={vi.fn()}/>);
   });
 
   it('renders Radio with a player', () => {
-     render(<Radio current_track={mockTrack} player={true} playerFunction={null} isPaused={true}/>);
+     render(<Radio current_track={mockTrack} player={true} playerFunction={null} isPaused={true} favorites={[mockTrack]} onFavorite={vi.fn()} onUnfavorite={vi.fn()}/>);
   });
 
   it('handles pause, play, next, last song button clicks with playerFunction', () => {
      let fn = vi.fn();
-     render(<Radio current_track={mockTrack} player={true} playerFunction={fn} isPaused={true}/>);
+     render(<Radio current_track={mockTrack} player={true} playerFunction={fn} isPaused={true} favorites={[mockTrack]} onFavorite={vi.fn()} onUnfavorite={vi.fn()}/>);
      let controlsContainer = screen.getByTestId('player-controls');
      let controlButtons = controlsContainer.getElementsByTagName("button");
      for (let button of Array.from(controlButtons)) {

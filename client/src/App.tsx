@@ -9,7 +9,6 @@ import Search from './components/Search';
 import SearchResults from './components/SearchResults';
 import Radio from './components/Radio';
 
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import Favorites from './components/Favorites';
 
 const DEFAULT_POSITION: [number, number] = [51.505, -0.09];
@@ -257,7 +256,7 @@ function App() {
   }
 
   function onFavorite(track: Track) {
-      //setFavorites([...favorites, track]);
+      setFavorites([track, ...favorites]);
       spotifyService.addFavoriteSong(authToken, track.id)
         .then(() => {
           getAndSetFavoriteSongs();
@@ -268,7 +267,7 @@ function App() {
   }
 
   function onUnfavorite(track: Track) {
-    //setFavorites(favorites.filter((favorite) => (favorite.id !== track.id)));
+    setFavorites(favorites.filter((favorite) => (favorite.id !== track.id)));
     spotifyService.removeFavoriteSong(authToken, track.id)
       .then(() => {
         getAndSetFavoriteSongs();
