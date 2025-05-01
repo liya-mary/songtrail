@@ -10,6 +10,5 @@ describe('Header', () => {
     screen.debug();
     expect(screen.getByText('SongTrail')).toBeInTheDocument();
 
-    // check if Header components renders headline
   });
 });

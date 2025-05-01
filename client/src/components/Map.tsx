@@ -1,5 +1,4 @@
 import { MapContainer, TileLayer, Marker, useMap, Polyline } from "react-leaflet";
-import React from "react";
 import { useEffect } from "react";
 import Tag from "./Tag";
 import L from 'leaflet';
@@ -34,8 +33,6 @@ export function Map({position, tagList, handleClick}: mapProps) {
   });
 
   const blackOptions = { color: "#67B996"};
-
-  //delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: markerIcon2x,
     iconUrl: markerIcon,

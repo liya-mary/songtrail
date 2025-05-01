@@ -106,8 +106,7 @@ export default {
         })
       };
 
-      //const params = new URLSearchParams({ ids: `${trackId}` });
-      const url = "https://api.spotify.com/v1/me/tracks"; //?${params.toString()}`;
+      const url = "https://api.spotify.com/v1/me/tracks";
 
       const response = await fetch(url, searchParameters);
 
@@ -133,8 +132,7 @@ export default {
         })
       };
 
-      //const params = new URLSearchParams({ ids: `${trackId}` });
-      const url = "https://api.spotify.com/v1/me/tracks"; //?${params.toString()}`;
+      const url = "https://api.spotify.com/v1/me/tracks"; 
 
       const response = await fetch(url, searchParameters);
 

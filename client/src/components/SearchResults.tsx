@@ -1,5 +1,3 @@
-import React from "react";
-
 interface resultsProps {
   tracks: Track[];
   handleTrackClick: (arg: Track) => void;

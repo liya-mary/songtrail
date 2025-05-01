@@ -1,6 +1,4 @@
 import { render, screen } from '@testing-library/react';
-
-
 import NowPlaying from './NowPlaying';
 
 const mockTrack = {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Map from './components/Map';
 import { Header } from './components/Header';
 import tagService from './tagService';
-import { NowPlaying } from './components/NowPlaying';
 import spotifyService from './spotifyService';
 import Login from './components/Login';
 import Search from './components/Search';
@@ -146,19 +145,6 @@ function App() {
         });
 
         player.connect()
-
-          // player.addListener('initialization_error', ({ message }) => {
-          //   console.error('Init Error:', message);
-          // });
-          // player.addListener('authentication_error', ({ message }) => {
-          //   console.error('Auth Error:', message);
-          // });
-          // player.addListener('account_error', ({ message }) => {
-          //   console.error('Account Error:', message);
-          // });
-          // player.addListener('playback_error', ({ message }) => {
-          //   console.error('Playback Error:', message);
-          // });
           .then(success => {
             if (!success) {
               console.log('Failed to connect player');

@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
-import { Schema, model, connect } from 'mongoose';
-
-
+import { Schema } from 'mongoose';
 
 interface Tag {
   title: string;
@@ -11,7 +9,6 @@ interface Tag {
   timestamp:number
 }
 
-
 const tagSchema = new Schema<Tag>({
   title: { type: String, required: true },
   artist: { type: String, required: true },
@@ -20,17 +17,7 @@ const tagSchema = new Schema<Tag>({
   timestamp: { type: Number, required: true },
 });
 
-// const tagSchema = new mongoose.Schema({
-//     title: String,
-//     artist: String,
-//     src: String,
-//     coordinates: Array,
-//     timestamp: Number,
-//   }
-// )
-
 const Tags= mongoose.model('Tags', tagSchema);
-
 
 export type {Tag};
 export default Tags;

@@ -5,7 +5,6 @@ import { URLSearchParams } from "url";
 var userAccessToken: string|null = null
 var userRefreshToken: string|null = null
 var userAccessTokenExpiry:any|null =null
-
 var appAccessToken: string|null = null
 var appRefreshToken: string|null = null
 var appAccessTokenExpiry:any|null =null
@@ -32,7 +31,6 @@ export async function addTag(req:Request, res:Response) {
   }
 }
 
-//creating new token everytime getToken called search function
 
 export async function getToken(req:Request, res:Response) {
   try {
@@ -64,74 +62,6 @@ export async function getToken(req:Request, res:Response) {
 }
 
 
-// export async function getToken(req:Request, res:Response):Promise<any>{
-//   try {
-//     const { CLIENT_ID, CLIENT_SECRET } = process.env;
-//     if (!(appRefreshToken && CLIENT_SECRET && CLIENT_ID)) {
-//       return null;
-//     }
-
-//     if(!appAccessToken ||Date.now()>appAccessTokenExpiry){
-//       const authOptions = {
-//         url: "https://accounts.spotify.com/api/token",
-//         headers: {
-//           "content-type": "application/x-www-form-urlencoded",
-//           Authorization:
-//             "Basic " +
-//             Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
-//         },
-//         form: {
-//           grant_type: "client_credentials",
-//         },
-//         json: true,
-//       };
-    
-//       const response = await fetch(authOptions.url, {
-//         method: "post",
-//         body: new URLSearchParams(authOptions.form),
-//         headers: authOptions.headers,
-//       });
-//       const res_data = await response.json();
-//       appAccessToken=res_data.access_token;
-//       console.log("app access token: ",appAccessToken);
-//       appAccessTokenExpiry=Date.now()+res_data.expires_in *1000;
-//       console.log("app token updated..");
-//       console.log(appAccessToken);
-//       return res.status(200).json({ access_token: appAccessToken }); 
-
-//     }else{
-//       console.log("app saved token..",appAccessToken);
-//       return res.status(200).json({ access_token: appAccessToken });
-//     }
-
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json(err)
-//   }
-// }
-
-
-// export async function getToken(req:Request, res:Response) {
-//   try {
-//     const { CLIENT_ID, CLIENT_SECRET } = process.env;
-//     const response = await fetch('https://accounts.spotify.com/api/token', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/x-www-form-urlencoded'
-//       },
-//       body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
-//     })
-//     const tokenObject = await response.json()
-
-
-//     res.status(200).json(tokenObject)
-
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json(err)
-//   }
-// }
-
 
 const generateRandomString = function (length:number) {
   var text = '';
@@ -143,13 +73,8 @@ const generateRandomString = function (length:number) {
   return text;
 };
 
-//on login with spotify it gives an access token for user
-//reqest user authorizaton so that app can access spotify resources
-//spotify api-
-//play-spotify login
+
 export async function spotifyLogin(req:Request, res:Response) {
-
-
   const scope:string = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state user-library-read user-library-modify";
   const state:string = generateRandomString(16);
   const { CLIENT_ID } = process.env;
@@ -166,7 +91,6 @@ export async function spotifyLogin(req:Request, res:Response) {
 }
 
 
-//request an access token of  user
 export async function spotifyAuth(req:Request, res:Response)  {
   const code = req.query.code;
   const { CLIENT_ID, CLIENT_SECRET } = process.env;
@@ -203,11 +127,6 @@ export async function spotifyAuth(req:Request, res:Response)  {
 
 
 export async function returnToken(req:Request, res:Response):Promise<any> {
-  // if (!userAccessToken) {
-  //   res.status(401).json({ error: "No token available" });
-  //   return ;
-  // }
-  // res.json({ access_token: userAccessToken });
 
   try {
         const { CLIENT_ID, CLIENT_SECRET } = process.env;
@@ -251,6 +170,5 @@ export async function returnToken(req:Request, res:Response):Promise<any> {
       } catch (err) {
         console.log(err);
         res.status(500).json({err})
-      }
-    
+      } 
 }
