@@ -50,10 +50,11 @@ export async function getToken(req:Request, res:Response) {
       const tokenObject = await response.json();
       appAccessToken=tokenObject.access_token;
       appAccessTokenExpiry=Date.now()+ tokenObject.expires_in *1000
-  
-      res.status(200).json(tokenObject)
+      console.log("new app token: ",appAccessToken);
+      res.status(200).json({access_token:appAccessToken})
     }else{
-      res.status(200).json({access_token:userAccessToken})
+      console.log("saved app token: ",appAccessToken);
+      res.status(200).json({access_token:appAccessToken})
     }
 
 

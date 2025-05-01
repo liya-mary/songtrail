@@ -10,10 +10,10 @@ export default {
         return null;
       }
 
-      const tokenObject = await response.json();
-      const accessToken = tokenObject.access_token;
-      // const accessToken=await response.json();
-      // console.log("app access token from server: ",accessToken);
+      // const tokenObject = await response.json();
+      // const accessToken = tokenObject.access_token;
+      const accessToken=await response.json();
+      console.log("app access token from server: ",accessToken);
       return accessToken;
     } catch (error) {
       console.error('Error in getAccessToken:', error);
