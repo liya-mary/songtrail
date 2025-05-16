@@ -1,78 +1,114 @@
+# 🎵 SongTrail
 
-# SongTrail
+**SongTrail** is a web application that visualizes your music-listening history in real time by pinning each song you play on a map.
 
-SongTrail is the web app that charts your music-listening history in real time and pin it on a map.
-- Play Spotify tracks seamlessly within the app.
-- Automatically record your location when a song plays.
-- View your personal music map, with connected markers tracing your listening journey.
+### ✨ Features
 
-Functionnalities to implement in future versions:
-- Authentication Token refresh (60 min limit at the moment)
-- Queue
-- Playlists
-- Trails history
-- Start songs with tags
-- Extensive listening datas
-- Concert recommendations
-- Friend system
-- Android/iOS version
+- Seamless Spotify playback within the app
+- Automatic location tracking for each played song
+- Interactive personal music map with connected markers that trace your listening journey
 
-Please note that the documentation from Spotify for their APIs is pretty outdated (Checked on April 2025).
+### 🚧 Upcoming Features
 
+- Song queue support
+- Playlist integration
+- Listening trail history
+- Start songs with custom tags
+- Rich listening statistics
+- Concert recommendations based on taste
+- Friend system & social integration
+- Mobile apps (Android/iOS)
 
-## Tech Stack
+> ⚠️ *Note: Spotify's API documentation is somewhat outdated (as of April 2025).*
 
-**Client:** React, Vite, Leaflet
+---
 
-**Server:** Node, Express, MongoDB, Mongoose
+## 🛠️ Tech Stack
 
-**API:** Spotify Web Playback SDK, Spotify Web API
+**Frontend:** React, Vite, Leaflet  
+**Backend:** Node.js, Express, MongoDB, Mongoose  
+**API:** Spotify Web Playback SDK, Spotify Web API  
+**Testing:** Vitest, React Testing Library
 
-**Important:** A Spotify premium membership and Spotify Dev account are required.
+> 🔐 *Requires a Spotify Premium account and a Spotify Developer account.*
 
-## Installation
+---
 
-- Install dependencies.
+## 🚀 Installation
 
-**Spotify Dev Website:**
+### 1. Clone the Repository
 
-- Create a [Spotify Dev Account](https://developer.spotify.com/dashboard) and enter your app name and description.
+```bash
+git clone https://github.com/yourusername/songtrail.git
+cd songtrail
+```
 
-- Add http://127.0.0.1:3000/auth/callback to your Redirect URIs.
+### 2. Install Dependencies
 
-**Project files:**
+```bash
+cd client
+npm install
+cd ../server
+npm install
+```
 
-- Update the .env.example variables in /server folder with your Spotify Client ID and Spotify Client Secret and use them in your .env file.
+### 3. Configure Spotify Developer Account
 
+- Create a [Spotify Developer Account](https://developer.spotify.com/dashboard).
+- Register a new app and set the following Redirect URI:
+  ```
+  http://127.0.0.1:3000/auth/callback
+  ```
 
+### 4. Environment Variables
 
+- Copy the `.env.example` in `/server` to `.env` and update it with:
+  - `SPOTIFY_CLIENT_ID`
+  - `SPOTIFY_CLIENT_SECRET`
 
+---
 
+## 💻 Running the App
 
+### Start the Client
 
-## Usage/Examples
+```bash
+cd client
+npm run dev
+```
 
-1. Run the project locally (Client, Server, Database).
-1. On the starting page, if there's a certificate security warning proceed anyway (we're local), authorize location tracking and Login to Spotify.
-1. If not already listening to Spotify on a separate device, search for a song in the search box and click on the magnifying glass. (Click on the cross button if you want to reset your search.)
-1. Click on a song. When the song plays, a pin should appear on the map and the view should re-position on it.
-1. Repeat the process and you should see a new pin appearing on the map linked to the first one by a line.
-1. Click on a tag and you should see the data attached to it.
+### Start the Server
 
-## Documentation
+```bash
+cd server
+nodemon index.js
+```
 
-[Spotify Web API](https://developer.spotify.com/documentation/web-api)
+---
 
-[Spotify Web Playback SDK](https://developer.spotify.com/documentation/web-playback-sdk) (pretty outdated)
+## 🧪 How to Use
 
-[Spotify Dev Account](https://developer.spotify.com/dashboard)
+1. Open the app in your browser.
+2. Accept any local certificate warning, enable location tracking, and log in with Spotify.
+3. If not already listening elsewhere, search for a song and click the play icon.
+4. A pin will appear on the map at your location.
+5. Each new song creates a new pin connected with a line, showing your musical path.
+6. Click tags to view associated metadata.
 
-[Leaflet API](https://leafletjs.com/reference.html)
+---
 
-[React-Leaflet](https://react-leaflet.js.org/)
+## 📚 Documentation
 
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api)
+- [Spotify Web Playback SDK](https://developer.spotify.com/documentation/web-playback-sdk) *(outdated)*
+- [Spotify Dev Account](https://developer.spotify.com/dashboard)
+- [Leaflet API](https://leafletjs.com/reference.html)
+- [React-Leaflet](https://react-leaflet.js.org/)
 
-## Authors
+---
 
+## 👩‍💻 Author
+
+- [@liya-mary](https://github.com/liya-mary)
+- [@tylaur](https://github.com/tylaur)
 - [@eric-gebus](https://www.github.com/-eric-gebus)
-
