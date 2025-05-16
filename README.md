@@ -2,6 +2,8 @@
 
 **SongTrail** is a web application that visualizes your music-listening history in real time by pinning each song you play on a map.
 
+![SongTrail](client/public/songtrail.png)
+
 ### ✨ Features
 
 - Seamless Spotify playback within the app
